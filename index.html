@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Cek PNR</title>
+
+  <style>
+    body {
+      font-family: Arial;
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      text-align: center;
+      width: 300px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    }
+
+    input {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px;
+      width: 100%;
+      border: none;
+      background: #4facfe;
+      color: white;
+      border-radius: 8px;
+    }
+
+    #hasil {
+      margin-top: 20px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="card">
+  <h2>Cek PNR</h2>
+
+  <input type="text" id="pnr" placeholder="Masukkan PNR">
+  <button onclick="cek()">Cek</button>
+
+  <p id="hasil"></p>
+</div>
+
+<script>
+  const data = {
+    "ABC123": { nama: "Budi", status: "Confirmed" },
+    "XYZ789": { nama: "Andi", status: "Boarding" }
+  };
+
+  function cek() {
+    let pnr = document.getElementById("pnr").value.toUpperCase();
+
+    if (data[pnr]) {
+      document.getElementById("hasil").innerHTML =
+        data[pnr].nama + " - " + data[pnr].status;
+    } else {
+      document.getElementById("hasil").innerHTML =
+        "PNR tidak ditemukan";
+    }
+  }
+</script>
+
+</body>
+</html>
