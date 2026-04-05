@@ -6,7 +6,10 @@
 <style>
 body {
     font-family: Arial;
-    background: linear-gradient(to right, #b30000, #ff1a1a);
+    background: linear-gradient(rgba(179,0,0,0.8), rgba(255,0,0,0.8)),
+    url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92');
+    background-size: cover;
+    background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,10 +20,11 @@ body {
 .card {
     background: rgba(255,255,255,0.95);
     padding: 25px;
-    border-radius: 12px;
+    border-radius: 15px;
     width: 320px;
     text-align: center;
-    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    animation: fadeIn 1s ease;
 }
 
 .logo {
@@ -33,24 +37,41 @@ h2 {
 }
 
 input {
-    padding: 10px;
-    width: 80%;
+    padding: 12px;
+    width: 85%;
     margin: 10px 0;
-    border-radius: 5px;
+    border-radius: 8px;
     border: 1px solid #ccc;
+    outline: none;
+}
+
+input:focus {
+    border: 2px solid red;
 }
 
 button {
-    padding: 10px 20px;
+    padding: 10px 25px;
     background: #b30000;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #ff1a1a;
 }
 
 #hasil {
     margin-top: 15px;
     font-weight: bold;
+}
+
+/* animasi */
+@keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
 }
 </style>
 
@@ -78,4 +99,36 @@ const data = {
 "ABC123": { nama: "Budi", status: "Confirmed" },
 "XYZ789": { nama: "Andi", status: "Boarding" },
 "QWE456": { nama: "Siti", status: "Delayed" },
-"RTY321": { nama: "Joko", status: "Cancelled
+"RTY321": { nama: "Joko", status: "Cancelled" }
+};
+
+function cek() {
+    let pnr = document.getElementById("pnr").value.toUpperCase();
+    let hasil = document.getElementById("hasil");
+
+    if (data[pnr]) {
+        let status = data[pnr].status;
+        let warna = "black";
+
+        if (status === "Confirmed") warna = "green";
+        if (status === "Boarding") warna = "blue";
+        if (status === "Delayed") warna = "orange";
+        if (status === "Cancelled") warna = "red";
+
+        hasil.innerHTML = data[pnr].nama + " - <span style='color:" + warna + "'>" + status + "</span>";
+    } else {
+        hasil.innerHTML = "<span style='color:red'>PNR tidak ditemukan</span>";
+    }
+}
+
+// ENTER
+document.getElementById("pnr").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        cek();
+    }
+});
+
+</script>
+
+</body>
+    </html>
