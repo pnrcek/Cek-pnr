@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Lion Air - Cek PNR</title>
+<title>Cek PNR - Lion Air</title>
 
 <style>
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
 
-    background: linear-gradient(rgba(120,0,0,0.7), rgba(180,0,0,0.9)),
+    /* BACKGROUND PESAWAT (CLEAN) */
+    background:
+    linear-gradient(rgba(255,255,255,0.85), rgba(255,255,255,0.9)),
     url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92');
 
     background-size: cover;
@@ -25,12 +27,12 @@ body {
 
 /* card */
 .card {
-    background: rgba(255,255,255,0.95);
+    background: white;
     padding: 30px;
     border-radius: 16px;
     width: 350px;
     text-align: center;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
 }
 
 /* logo */
@@ -71,17 +73,15 @@ input:focus {
 button {
     width: 95%;
     padding: 12px;
-    background: linear-gradient(135deg, #cc0000, #ff1a1a);
+    background: #cc0000;
     color: white;
     border: none;
     border-radius: 10px;
     cursor: pointer;
-    font-size: 15px;
-    transition: 0.3s;
 }
 
 button:hover {
-    opacity: 0.9;
+    background: #ff1a1a;
 }
 
 /* result */
@@ -150,7 +150,7 @@ function cek() {
     }, 800);
 }
 
-/* enter */
+/* ENTER */
 document.getElementById("pnr").addEventListener("keypress", function(e) {
     if (e.key === "Enter") cek();
 });
