@@ -1,77 +1,95 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Cek PNR - Lion Air</title>
+<title>Lion Air - Cek PNR</title>
 
 <style>
 body {
-    font-family: Arial;
-    background: linear-gradient(rgba(179,0,0,0.8), rgba(255,0,0,0.8)),
+    font-family: 'Segoe UI', sans-serif;
+    margin: 0;
+
+    background: linear-gradient(rgba(120,0,0,0.7), rgba(180,0,0,0.9)),
     url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92');
+
     background-size: cover;
     background-position: center;
+}
+
+/* container */
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    margin: 0;
 }
 
+/* card */
 .card {
     background: rgba(255,255,255,0.95);
-    padding: 25px;
-    border-radius: 15px;
-    width: 320px;
+    padding: 30px;
+    border-radius: 16px;
+    width: 350px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-    animation: fadeIn 1s ease;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.4);
 }
 
+/* logo */
 .logo {
-    width: 120px;
-    margin-bottom: 10px;
+    width: 110px;
+    margin-bottom: 15px;
 }
 
+/* title */
 h2 {
+    margin-bottom: 10px;
     color: #b30000;
 }
 
+/* subtitle */
+.subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/* input */
 input {
+    width: 90%;
     padding: 12px;
-    width: 85%;
     margin: 10px 0;
-    border-radius: 8px;
+    border-radius: 10px;
     border: 1px solid #ccc;
     outline: none;
+    font-size: 15px;
 }
 
 input:focus {
-    border: 2px solid red;
+    border-color: red;
 }
 
+/* button */
 button {
-    padding: 10px 25px;
-    background: #b30000;
+    width: 95%;
+    padding: 12px;
+    background: linear-gradient(135deg, #cc0000, #ff1a1a);
     color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
+    font-size: 15px;
     transition: 0.3s;
 }
 
 button:hover {
-    background: #ff1a1a;
+    opacity: 0.9;
 }
 
+/* result */
 #hasil {
-    margin-top: 15px;
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 10px;
     font-weight: bold;
-}
-
-/* animasi */
-@keyframes fadeIn {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
 }
 </style>
 
@@ -79,25 +97,30 @@ button:hover {
 
 <body>
 
+<div class="container">
+
 <div class="card">
 
 <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Lion_Air_logo.svg">
 
 <h2>Cek PNR</h2>
+<p class="subtitle">Masukkan kode booking Anda</p>
 
-<input type="text" id="pnr" placeholder="Masukkan PNR">
-<br>
-<button onclick="cek()">Cek</button>
+<input type="text" id="pnr" placeholder="Contoh: ABC123">
 
-<p id="hasil"></p>
+<button onclick="cek()">Cek Status</button>
+
+<div id="hasil"></div>
+
+</div>
 
 </div>
 
 <script>
 
 const data = {
-"ABC123": { nama: "battala", status: "terkonfirmasi" },
-"XYZ789": { nama: "cayyha", status: "Boarding" },
+"ABC123": { nama: "Budi", status: "Confirmed" },
+"XYZ789": { nama: "Andi", status: "Boarding" },
 "QWE456": { nama: "Siti", status: "Delayed" },
 "RTY321": { nama: "Joko", status: "Cancelled" }
 };
@@ -106,29 +129,33 @@ function cek() {
     let pnr = document.getElementById("pnr").value.toUpperCase();
     let hasil = document.getElementById("hasil");
 
-    if (data[pnr]) {
-        let status = data[pnr].status;
-        let warna = "black";
+    hasil.innerHTML = "⏳ Mengecek...";
 
-        if (status === "Confirmed") warna = "green";
-        if (status === "Boarding") warna = "blue";
-        if (status === "Delayed") warna = "orange";
-        if (status === "Cancelled") warna = "red";
+    setTimeout(() => {
+        if (data[pnr]) {
+            let status = data[pnr].status;
+            let warna = "black";
 
-        hasil.innerHTML = data[pnr].nama + " - <span style='color:" + warna + "'>" + status + "</span>";
-    } else {
-        hasil.innerHTML = "<span style='color:red'>PNR tidak ditemukan</span>";
-    }
+            if (status === "Confirmed") warna = "green";
+            if (status === "Boarding") warna = "blue";
+            if (status === "Delayed") warna = "orange";
+            if (status === "Cancelled") warna = "red";
+
+            hasil.innerHTML =
+                "✔ " + data[pnr].nama +
+                "<br>Status: <span style='color:" + warna + "'>" + status + "</span>";
+        } else {
+            hasil.innerHTML = "<span style='color:red'>PNR tidak ditemukan</span>";
+        }
+    }, 800);
 }
 
-// ENTER
+/* enter */
 document.getElementById("pnr").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") {
-        cek();
-    }
+    if (e.key === "Enter") cek();
 });
 
 </script>
 
 </body>
-    </html>
+</html>
