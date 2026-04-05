@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Cek PNR Sederhana</title>
+<title>Cek PNR - Lion Air</title>
 
 <style>
 body {
     font-family: Arial;
-    background: #cc0000;
+    background: linear-gradient(to right, #b30000, #ff1a1a);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -15,32 +15,41 @@ body {
 }
 
 .card {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    width: 300px;
+    background: rgba(255,255,255,0.95);
+    padding: 25px;
+    border-radius: 12px;
+    width: 320px;
     text-align: center;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+}
+
+.logo {
+    width: 120px;
+    margin-bottom: 10px;
 }
 
 h2 {
-    color: #cc0000;
+    color: #b30000;
 }
 
 input {
     padding: 10px;
     width: 80%;
     margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ccc;
 }
 
 button {
     padding: 10px 20px;
-    background: #cc0000;
+    background: #b30000;
     color: white;
     border: none;
+    border-radius: 5px;
 }
 
 #hasil {
-    margin-top: 10px;
+    margin-top: 15px;
     font-weight: bold;
 }
 </style>
@@ -50,6 +59,9 @@ button {
 <body>
 
 <div class="card">
+
+<img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Lion_Air_logo.svg">
+
 <h2>Cek PNR</h2>
 
 <input type="text" id="pnr" placeholder="Masukkan PNR">
@@ -57,28 +69,13 @@ button {
 <button onclick="cek()">Cek</button>
 
 <p id="hasil"></p>
+
 </div>
 
 <script>
 
 const data = {
-    "ABC123": { nama: "Budi", status: "Confirmed" },
-    "XYZ789": { nama: "Andi", status: "Boarding" },
-    "QWE456": { nama: "Siti", status: "Delayed" }
-};
-
-function cek() {
-    let pnr = document.getElementById("pnr").value.toUpperCase();
-    let hasil = document.getElementById("hasil");
-
-    if (data[pnr]) {
-        hasil.innerHTML = data[pnr].nama + " - " + data[pnr].status;
-    } else {
-        hasil.innerHTML = "PNR tidak ditemukan";
-    }
-}
-
-</script>
-
-</body>
-</html>    
+"ABC123": { nama: "Budi", status: "Confirmed" },
+"XYZ789": { nama: "Andi", status: "Boarding" },
+"QWE456": { nama: "Siti", status: "Delayed" },
+"RTY321": { nama: "Joko", status: "Cancelled
