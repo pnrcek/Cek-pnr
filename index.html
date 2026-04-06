@@ -19,16 +19,14 @@ body {
     background-repeat: no-repeat;
 }
 
-/* HEADER */
 .header {
     text-align: center;
     color: white;
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     padding: 20px;
 }
 
-/* CENTER */
 .container {
     display: flex;
     justify-content: center;
@@ -36,7 +34,6 @@ body {
     height: 80vh;
 }
 
-/* CARD */
 .card {
     width: 360px;
     padding: 25px;
@@ -49,42 +46,24 @@ body {
     color: white;
 }
 
-/* INPUT */
 input {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
     border: none;
-    margin-top: 10px;
 }
 
-/* BUTTON */
 button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-
-    background: #e60000;
+    background: #00a651;
     color: white;
-
     border: none;
     border-radius: 10px;
     font-weight: bold;
-    cursor: pointer;
-
-    transition: 0.3s;
 }
 
-button:hover {
-    background: #ff0000;
-    transform: scale(1.05);
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-/* RESULT */
 .result {
     margin-top: 20px;
     padding: 15px;
@@ -92,7 +71,6 @@ button:active {
     background: rgba(255,255,255,0.2);
 }
 
-/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -108,7 +86,6 @@ button:active {
     font-weight: bold;
 }
 
-/* STATUS */
 .badge {
     padding: 6px 12px;
     border-radius: 20px;
@@ -116,13 +93,11 @@ button:active {
     font-weight: bold;
 }
 
-.green { background: #00ff88; color: black; }
 .orange { background: orange; color: black; }
-.red { background: red; color: white; }
+.green { background: #00ff88; color: black; }
 
 .loading {
     text-align: center;
-    margin-top: 15px;
 }
 </style>
 </head>
@@ -134,7 +109,7 @@ button:active {
 <div class="container">
 <div class="card">
 
-<input id="pnr" placeholder="Masukkan kode PNR">
+<input id="pnr" placeholder="Masukkan kode booking">
 <button onclick="cek()">Cek Status</button>
 
 <div id="hasil"></div>
@@ -146,34 +121,21 @@ button:active {
 
 const data = {
 
-"ABC123": {
-nama: "Budi Santoso",
-maskapai: "Lion Air",
-flight: "JT-610",
-dari: "CGK (Jakarta)",
-ke: "DPS (Bali)",
-jam: "08:30",
-status: "Confirmed"
-},
-
-"XYZ789": {
-nama: "Andi Saputra",
-maskapai: "Garuda Indonesia",
-flight: "GA-200",
-dari: "CGK (Jakarta)",
-ke: "SUB (Surabaya)",
-jam: "13:45",
+"RVL789": {
+nama: "Rivaldi",
+maskapai: "Citilink",
+flight: "QG-812",
+dari: "UPG (Makassar)",
+ke: "DJJ (Jayapura)",
+tanggal: "Kamis, 10 April 2026",
+jam: "09:15",
+boarding: "08:30",
+gate: "Gate 4",
+seat: "12A",
+terminal: "Terminal 1",
+kelas: "Economy",
+bagasi: "20 kg",
 status: "Menunggu Pembayaran"
-},
-
-"QWE456": {
-nama: "Siti Aminah",
-maskapai: "AirAsia",
-flight: "AK-101",
-dari: "KUL (Malaysia)",
-ke: "CGK (Jakarta)",
-jam: "17:20",
-status: "Confirmed"
 }
 
 };
@@ -191,26 +153,34 @@ if(data[pnr]){
 
 let d = data[pnr];
 
-let warna = "green";
-if(d.status == "Menunggu Pembayaran") warna = "orange";
-
 h.innerHTML = `
 <div class="result">
 
 <div class="grid">
 <div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
 <div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
+
 <div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
+<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
+
 <div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
 <div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
+
+<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
+<div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
+
+<div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
+<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
+
+<div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
+<div><div class="label">Bagasi</div><div class="value">${d.bagasi}</div></div>
 </div>
 
 <br>
 
 <div>
 <div class="label">Status</div>
-<span class="badge ${warna}">${d.status}</span>
+<span class="badge orange">${d.status}</span>
 </div>
 
 </div>
@@ -220,7 +190,7 @@ h.innerHTML = `
 
 h.innerHTML = `
 <div class="result" style="color:red;">
-PNR tidak ditemukan
+Kode booking tidak ditemukan
 </div>
 `;
 
