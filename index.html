@@ -8,7 +8,6 @@ body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
 
-    /* BACKGROUND PESAWAT (PASTI MUNCUL) */
     background:
     linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
     url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92');
@@ -17,7 +16,6 @@ body {
     background-position: center;
 }
 
-/* container */
 .container {
     display: flex;
     justify-content: center;
@@ -25,147 +23,10 @@ body {
     height: 100vh;
 }
 
-/* card */
 .card {
     background: rgba(255,255,255,0.95);
     padding: 30px;
     border-radius: 16px;
-    width: 350px;
+    width: 360px;
     text-align: center;
-    box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-}
-
-/* logo */
-.logo {
-    width: 110px;
-    margin-bottom: 10px;
-}
-
-/* title */
-h2 {
-    color: #cc0000;
-}
-
-/* input */
-input {
-    width: 90%;
-    padding: 12px;
-    margin: 10px 0;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-}
-
-/* button */
-button {
-    width: 95%;
-    padding: 12px;
-    background: #cc0000;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-}
-
-/* hasil */
-#hasil {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background: #f5f5f5;
-    text-align: left;
-    font-size: 14px;
-}
-</style>
-
-</head>
-
-<body>
-
-<div class="container">
-
-<div class="card">
-
-<img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Lion_Air_logo.svg">
-
-<h2>Cek PNR</h2>
-
-<input type="text" id="pnr" placeholder="Masukkan Kode PNR">
-
-<button onclick="cek()">Cek Status</button>
-
-<div id="hasil"></div>
-
-</div>
-
-</div>
-
-<script>
-
-const data = {
-"ABC123": {
-    nama: "Budi Santoso",
-    penerbangan: "JT-610",
-    jam: "08:30",
-    status: "Confirmed"
-},
-"XYZ789": {
-    nama: "Andi Wijaya",
-    penerbangan: "JT-245",
-    jam: "10:15",
-    status: "Boarding"
-},
-"QWE456": {
-    nama: "Siti Aminah",
-    penerbangan: "JT-900",
-    jam: "12:45",
-    status: "Delayed"
-},
-"RTY321": {
-    nama: "Joko Prasetyo",
-    penerbangan: "JT-777",
-    jam: "15:00",
-    status: "Cancelled"
-}
-};
-
-function cek() {
-    let pnr = document.getElementById("pnr").value.toUpperCase();
-    let hasil = document.getElementById("hasil");
-
-    hasil.innerHTML = "⏳ Mengecek...";
-
-    setTimeout(() => {
-
-        if (data[pnr]) {
-
-            let d = data[pnr];
-            let warna = "black";
-
-            if (d.status === "Confirmed") warna = "green";
-            if (d.status === "Boarding") warna = "blue";
-            if (d.status === "Delayed") warna = "orange";
-            if (d.status === "Cancelled") warna = "red";
-
-            hasil.innerHTML = `
-            <b>Nama Penumpang:</b> ${d.nama}<br>
-            <b>Kode Penerbangan:</b> ${d.penerbangan}<br>
-            <b>Jam Berangkat:</b> ${d.jam}<br>
-            <b>Status:</b> <span style="color:${warna}">${d.status}</span>
-            `;
-
-        } else {
-            hasil.innerHTML = "<span style='color:red'>PNR tidak ditemukan</span>";
-        }
-
-    }, 800);
-}
-
-/* ENTER */
-document.getElementById("pnr").addEventListener("keypress", function(e) {
-    if (e.key === "Enter") cek();
-});
-
-</script>
-
-</body>
-</html>
+    box-shadow
