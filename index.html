@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Flight PNR Checker</title>
+<title>Boarding Pass</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #0f4c81, #1e90ff);
+    color: white;
 }
 
 /* HEADER */
 .header {
     text-align: center;
-    color: white;
+    padding: 20px;
     font-size: 24px;
     font-weight: bold;
-    padding: 25px;
 }
 
 /* CONTAINER */
@@ -26,62 +26,37 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 85vh;
 }
 
-/* CARD */
-.card {
+/* BOARDING PASS */
+.ticket {
     width: 380px;
-    padding: 25px;
     border-radius: 25px;
-
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(25px);
-    border: 1px solid rgba(255,255,255,0.2);
-
-    box-shadow: 0 25px 70px rgba(0,0,0,0.5);
-    color: white;
-    margin: 10px;
+    overflow: hidden;
+    background: white;
+    color: black;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
-/* INPUT */
-input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    font-size: 14px;
+/* TOP */
+.top {
+    background: #0f4c81;
+    color: white;
+    padding: 20px;
 }
 
-/* BUTTON */
-button {
-    width: 100%;
-    padding: 14px;
-    margin-top: 12px;
-    background: #00a651;
-    color: white;
-    border: none;
-    border-radius: 12px;
+.route {
+    font-size: 28px;
     font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
+    text-align: center;
 }
 
-button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+/* MIDDLE */
+.middle {
+    padding: 20px;
 }
 
-/* RESULT */
-.result {
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 18px;
-    background: rgba(255,255,255,0.2);
-    animation: fadeIn 0.4s ease;
-}
-
-/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -90,142 +65,74 @@ button:hover {
 
 .label {
     font-size: 11px;
-    opacity: 0.7;
+    color: gray;
 }
 
 .value {
-    font-size: 16px;
-    font-weight: 700;
+    font-weight: bold;
+    font-size: 15px;
 }
 
 /* STATUS */
-.badge {
-    padding: 8px 14px;
+.status {
+    margin-top: 10px;
+    padding: 8px;
+    text-align: center;
     border-radius: 20px;
-    font-size: 12px;
+    background: orange;
     font-weight: bold;
 }
 
-.orange { background: orange; color: black; }
-.green { background: #00ff88; color: black; }
-.red { background: red; color: white; }
-
-/* ANIMATION */
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px);}
-    to { opacity: 1; transform: translateY(0);}
+/* QR */
+.qr {
+    text-align: center;
+    padding: 20px;
 }
 
-.loading {
-    text-align: center;
+.qr img {
+    width: 120px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ Flight PNR Checker</div>
+<div class="header">✈️ Boarding Pass</div>
 
 <div class="container">
-<div class="card">
+<div class="ticket">
 
-<input id="pnr" placeholder="Masukkan kode booking">
-<button onclick="cek()">Cek Status</button>
-
-<div id="hasil"></div>
-
-</div>
+<div class="top">
+    <div class="route">UPG ✈ DJJ</div>
+    <div style="text-align:center; font-size:13px;">Makassar → Jayapura</div>
 </div>
 
-<script>
-
-const data = {
-
-"RVL789": {
-nama: "Rivaldi Pratama",
-maskapai: "Citilink",
-flight: "QG-812",
-dari: "UPG — Makassar",
-ke: "DJJ — Jayapura",
-tanggal: "Kamis, 10 April 2026",
-jam: "09:15",
-boarding: "08:30",
-gate: "Gate 4",
-seat: "12A",
-terminal: "Terminal 1",
-kelas: "Economy",
-bagasi: "20 kg",
-status: "Menunggu Pembayaran"
-}
-
-};
-
-function cek(){
-
-let pnr = document.getElementById("pnr").value.toUpperCase();
-let h = document.getElementById("hasil");
-
-h.innerHTML = `<div class="loading">⏳ Checking data...</div>`;
-
-setTimeout(() => {
-
-if(data[pnr]){
-
-let d = data[pnr];
-
-/* STATUS COLOR AUTO */
-let warna = "orange";
-if(d.status === "Confirmed") warna = "green";
-if(d.status === "Cancelled") warna = "red";
-
-h.innerHTML = `
-<div class="result">
+<div class="middle">
 
 <div class="grid">
-<div><div class="label">Passenger</div><div class="value">${d.nama}</div></div>
-<div><div class="label">Airline</div><div class="value">${d.maskapai}</div></div>
+<div><div class="label">Nama</div><div class="value">Rivaldi Pratama</div></div>
+<div><div class="label">Maskapai</div><div class="value">Citilink</div></div>
 
-<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Date</div><div class="value">${d.tanggal}</div></div>
+<div><div class="label">Flight</div><div class="value">QG-812</div></div>
+<div><div class="label">Seat</div><div class="value">12A</div></div>
 
-<div><div class="label">From</div><div class="value">${d.dari}</div></div>
-<div><div class="label">To</div><div class="value">${d.ke}</div></div>
+<div><div class="label">Tanggal</div><div class="value">10 Apr 2026</div></div>
+<div><div class="label">Boarding</div><div class="value">08:30</div></div>
 
-<div><div class="label">Departure</div><div class="value">${d.jam}</div></div>
-<div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
-
-<div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
-<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
-
-<div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
-<div><div class="label">Baggage</div><div class="value">${d.bagasi}</div></div>
+<div><div class="label">Gate</div><div class="value">4</div></div>
+<div><div class="label">Terminal</div><div class="value">1</div></div>
 </div>
 
-<br>
+<div class="status">Menunggu Pembayaran</div>
 
-<div>
-<div class="label">Status</div>
-<span class="badge ${warna}">${d.status}</span>
+</div>
+
+<div class="qr">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=RVL789">
 </div>
 
 </div>
-`;
-
-}else{
-
-h.innerHTML = `
-<div class="result" style="color:red;">
-PNR tidak ditemukan
 </div>
-`;
-
-}
-
-}, 800);
-
-}
-
-</script>
 
 </body>
 </html>
