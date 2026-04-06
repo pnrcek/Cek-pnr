@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boarding Pass</title>
+<title>PNR Checker</title>
 
 <style>
 body {
@@ -13,7 +13,6 @@ body {
     color: white;
 }
 
-/* HEADER */
 .header {
     text-align: center;
     padding: 20px;
@@ -21,46 +20,69 @@ body {
     font-weight: bold;
 }
 
-/* CONTAINER */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 85vh;
+    height: 75vh;
 }
 
-/* BOARDING PASS */
-.ticket {
+.card {
     width: 380px;
+    padding: 25px;
     border-radius: 25px;
+
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255,255,255,0.3);
+
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 12px;
+    background: #00a651;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.ticket {
+    margin-top: 20px;
+    border-radius: 20px;
     overflow: hidden;
     background: white;
     color: black;
-    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
-/* TOP */
+/* BOARDING PASS */
 .top {
     background: #0f4c81;
     color: white;
-    padding: 20px;
-}
-
-.route {
-    font-size: 28px;
-    font-weight: bold;
+    padding: 15px;
     text-align: center;
+    font-size: 22px;
+    font-weight: bold;
 }
 
-/* MIDDLE */
 .middle {
-    padding: 20px;
+    padding: 15px;
 }
 
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
 }
 
 .label {
@@ -70,10 +92,8 @@ body {
 
 .value {
     font-weight: bold;
-    font-size: 15px;
 }
 
-/* STATUS */
 .status {
     margin-top: 10px;
     padding: 8px;
@@ -83,56 +103,96 @@ body {
     font-weight: bold;
 }
 
-/* QR */
 .qr {
     text-align: center;
-    padding: 20px;
-}
-
-.qr img {
-    width: 120px;
+    padding: 15px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ Boarding Pass</div>
+<div class="header">✈️ Flight PNR Checker</div>
 
 <div class="container">
+<div class="card">
+
+<input id="pnr" placeholder="Masukkan kode booking">
+<button onclick="cek()">Cek Status</button>
+
+<div id="hasil"></div>
+
+</div>
+</div>
+
+<script>
+
+const data = {
+"RVL789": {
+nama: "Rivaldi Pratama",
+maskapai: "Citilink",
+flight: "QG-812",
+dari: "UPG",
+ke: "DJJ",
+kotaDari: "Makassar",
+kotaKe: "Jayapura",
+tanggal: "10 Apr 2026",
+boarding: "08:30",
+seat: "12A",
+gate: "4",
+terminal: "1",
+status: "Menunggu Pembayaran"
+}
+};
+
+function cek(){
+let pnr = document.getElementById("pnr").value.toUpperCase();
+let h = document.getElementById("hasil");
+
+if(data[pnr]){
+let d = data[pnr];
+
+h.innerHTML = `
 <div class="ticket">
 
 <div class="top">
-    <div class="route">UPG ✈ DJJ</div>
-    <div style="text-align:center; font-size:13px;">Makassar → Jayapura</div>
+${d.dari} ✈ ${d.ke}<br>
+<small>${d.kotaDari} → ${d.kotaKe}</small>
 </div>
 
 <div class="middle">
 
 <div class="grid">
-<div><div class="label">Nama</div><div class="value">Rivaldi Pratama</div></div>
-<div><div class="label">Maskapai</div><div class="value">Citilink</div></div>
+<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
+<div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
 
-<div><div class="label">Flight</div><div class="value">QG-812</div></div>
-<div><div class="label">Seat</div><div class="value">12A</div></div>
+<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
+<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
 
-<div><div class="label">Tanggal</div><div class="value">10 Apr 2026</div></div>
-<div><div class="label">Boarding</div><div class="value">08:30</div></div>
+<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
+<div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
 
-<div><div class="label">Gate</div><div class="value">4</div></div>
-<div><div class="label">Terminal</div><div class="value">1</div></div>
+<div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
+<div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
 </div>
 
-<div class="status">Menunggu Pembayaran</div>
+<div class="status">${d.status}</div>
 
 </div>
 
 <div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=RVL789">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${pnr}">
 </div>
 
 </div>
-</div>
+`;
+
+}else{
+h.innerHTML = `<div style="color:red;">PNR tidak ditemukan</div>`;
+}
+}
+
+</script>
 
 </body>
 </html>
