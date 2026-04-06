@@ -10,15 +10,17 @@ body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
 
+    /* BACKGROUND LANGIT BIRU */
     background:
-    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
+    linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)),
+    url('https://cdn.pixabay.com/photo/2016/11/18/17/20/aircraft-1835485_1280.jpg');
 
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
 }
 
+/* HEADER */
 .header {
     text-align: center;
     color: white;
@@ -27,6 +29,7 @@ body {
     padding: 20px;
 }
 
+/* CONTAINER */
 .container {
     display: flex;
     justify-content: center;
@@ -34,18 +37,20 @@ body {
     height: 80vh;
 }
 
+/* CARD */
 .card {
     width: 360px;
     padding: 25px;
     border-radius: 20px;
 
-    background: rgba(255,255,255,0.12);
+    background: rgba(255,255,255,0.15);
     backdrop-filter: blur(15px);
 
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
     color: white;
 }
 
+/* INPUT */
 input {
     width: 100%;
     padding: 12px;
@@ -53,6 +58,7 @@ input {
     border: none;
 }
 
+/* BUTTON */
 button {
     width: 100%;
     padding: 12px;
@@ -62,15 +68,23 @@ button {
     border: none;
     border-radius: 10px;
     font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
+button:hover {
+    transform: scale(1.05);
+}
+
+/* RESULT */
 .result {
     margin-top: 20px;
     padding: 15px;
     border-radius: 12px;
-    background: rgba(255,255,255,0.2);
+    background: rgba(255,255,255,0.25);
 }
 
+/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -79,13 +93,14 @@ button {
 
 .label {
     font-size: 12px;
-    color: #ddd;
+    color: #eee;
 }
 
 .value {
     font-weight: bold;
 }
 
+/* STATUS */
 .badge {
     padding: 6px 12px;
     border-radius: 20px;
@@ -122,7 +137,7 @@ button {
 const data = {
 
 "RVL789": {
-nama: "Rivaldi",
+nama: "Rivaldi Pratama",
 maskapai: "Citilink",
 flight: "QG-812",
 dari: "UPG (Makassar)",
