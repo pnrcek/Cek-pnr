@@ -7,7 +7,13 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    background: #cc0000;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)),
+    url('pesawat.jpg');
+
+    background-size: cover;
+    background-position: center;
 }
 
 /* container */
@@ -20,7 +26,7 @@ body {
 
 /* card */
 .card {
-    background: white;
+    background: rgba(255,255,255,0.95);
     padding: 30px;
     border-radius: 16px;
     width: 350px;
@@ -37,7 +43,6 @@ body {
 /* title */
 h2 {
     color: #cc0000;
-    margin-bottom: 10px;
 }
 
 /* input */
@@ -60,14 +65,14 @@ button {
     cursor: pointer;
 }
 
-/* result box */
+/* hasil */
 #hasil {
     margin-top: 20px;
     padding: 15px;
     border-radius: 10px;
+    background: #f5f5f5;
     text-align: left;
     font-size: 14px;
-    background: #f5f5f5;
 }
 </style>
 
@@ -98,27 +103,27 @@ button {
 const data = {
 "ABC123": {
     nama: "Budi Santoso",
-    status: "Confirmed",
+    penerbangan: "JT-610",
     jam: "08:30",
-    gate: "A1"
+    status: "Confirmed"
 },
 "XYZ789": {
     nama: "Andi Wijaya",
-    status: "Boarding",
+    penerbangan: "JT-245",
     jam: "10:15",
-    gate: "B3"
+    status: "Boarding"
 },
 "QWE456": {
     nama: "Siti Aminah",
-    status: "Delayed",
+    penerbangan: "JT-900",
     jam: "12:45",
-    gate: "C2"
+    status: "Delayed"
 },
 "RTY321": {
     nama: "Joko Prasetyo",
-    status: "Cancelled",
+    penerbangan: "JT-777",
     jam: "15:00",
-    gate: "D4"
+    status: "Cancelled"
 }
 };
 
@@ -141,10 +146,10 @@ function cek() {
             if (d.status === "Cancelled") warna = "red";
 
             hasil.innerHTML = `
-            <b>Nama:</b> ${d.nama}<br>
-            <b>Status:</b> <span style="color:${warna}">${d.status}</span><br>
+            <b>Nama Penumpang:</b> ${d.nama}<br>
+            <b>Kode Penerbangan:</b> ${d.penerbangan}<br>
             <b>Jam Berangkat:</b> ${d.jam}<br>
-            <b>Gate:</b> ${d.gate}
+            <b>Status:</b> <span style="color:${warna}">${d.status}</span>
             `;
 
         } else {
