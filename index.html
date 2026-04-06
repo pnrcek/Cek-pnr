@@ -9,20 +9,16 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-
-    /* BACKGROUND BIRU FINAL */
     background: linear-gradient(135deg, #0f4c81, #1e90ff);
-
-    height: 100vh;
 }
 
 /* HEADER */
 .header {
     text-align: center;
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
-    padding: 20px;
+    padding: 25px;
 }
 
 /* CONTAINER */
@@ -35,34 +31,37 @@ body {
 
 /* CARD */
 .card {
-    width: 360px;
+    width: 380px;
     padding: 25px;
-    border-radius: 20px;
+    border-radius: 25px;
 
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(25px);
+    border: 1px solid rgba(255,255,255,0.2);
 
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    box-shadow: 0 25px 70px rgba(0,0,0,0.5);
     color: white;
+    margin: 10px;
 }
 
 /* INPUT */
 input {
     width: 100%;
-    padding: 12px;
-    border-radius: 10px;
+    padding: 14px;
+    border-radius: 12px;
     border: none;
+    font-size: 14px;
 }
 
 /* BUTTON */
 button {
     width: 100%;
-    padding: 12px;
-    margin-top: 10px;
+    padding: 14px;
+    margin-top: 12px;
     background: #00a651;
     color: white;
     border: none;
-    border-radius: 10px;
+    border-radius: 12px;
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
@@ -70,35 +69,38 @@ button {
 
 button:hover {
     transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.3);
 }
 
 /* RESULT */
 .result {
     margin-top: 20px;
-    padding: 15px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.25);
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.2);
+    animation: fadeIn 0.4s ease;
 }
 
 /* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 12px;
 }
 
 .label {
-    font-size: 12px;
-    color: #eee;
+    font-size: 11px;
+    opacity: 0.7;
 }
 
 .value {
-    font-weight: bold;
+    font-size: 16px;
+    font-weight: 700;
 }
 
 /* STATUS */
 .badge {
-    padding: 6px 12px;
+    padding: 8px 14px;
     border-radius: 20px;
     font-size: 12px;
     font-weight: bold;
@@ -106,6 +108,13 @@ button:hover {
 
 .orange { background: orange; color: black; }
 .green { background: #00ff88; color: black; }
+.red { background: red; color: white; }
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px);}
+    to { opacity: 1; transform: translateY(0);}
+}
 
 .loading {
     text-align: center;
@@ -136,8 +145,8 @@ const data = {
 nama: "Rivaldi Pratama",
 maskapai: "Citilink",
 flight: "QG-812",
-dari: "UPG (Makassar)",
-ke: "DJJ (Jayapura)",
+dari: "UPG — Makassar",
+ke: "DJJ — Jayapura",
 tanggal: "Kamis, 10 April 2026",
 jam: "09:15",
 boarding: "08:30",
@@ -156,7 +165,7 @@ function cek(){
 let pnr = document.getElementById("pnr").value.toUpperCase();
 let h = document.getElementById("hasil");
 
-h.innerHTML = `<div class="loading">⏳ Mengecek data...</div>`;
+h.innerHTML = `<div class="loading">⏳ Checking data...</div>`;
 
 setTimeout(() => {
 
@@ -164,34 +173,39 @@ if(data[pnr]){
 
 let d = data[pnr];
 
+/* STATUS COLOR AUTO */
+let warna = "orange";
+if(d.status === "Confirmed") warna = "green";
+if(d.status === "Cancelled") warna = "red";
+
 h.innerHTML = `
 <div class="result">
 
 <div class="grid">
-<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
-<div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
+<div><div class="label">Passenger</div><div class="value">${d.nama}</div></div>
+<div><div class="label">Airline</div><div class="value">${d.maskapai}</div></div>
 
 <div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
+<div><div class="label">Date</div><div class="value">${d.tanggal}</div></div>
 
-<div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
-<div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
+<div><div class="label">From</div><div class="value">${d.dari}</div></div>
+<div><div class="label">To</div><div class="value">${d.ke}</div></div>
 
-<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
+<div><div class="label">Departure</div><div class="value">${d.jam}</div></div>
 <div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
 
 <div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
 <div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
 
 <div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
-<div><div class="label">Bagasi</div><div class="value">${d.bagasi}</div></div>
+<div><div class="label">Baggage</div><div class="value">${d.bagasi}</div></div>
 </div>
 
 <br>
 
 <div>
 <div class="label">Status</div>
-<span class="badge orange">${d.status}</span>
+<span class="badge ${warna}">${d.status}</span>
 </div>
 
 </div>
@@ -201,7 +215,7 @@ h.innerHTML = `
 
 h.innerHTML = `
 <div class="result" style="color:red;">
-Kode booking tidak ditemukan
+PNR tidak ditemukan
 </div>
 `;
 
