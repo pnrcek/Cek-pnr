@@ -12,23 +12,19 @@ body {
     background: linear-gradient(135deg, #0d47a1, #42a5f5);
 }
 
-/* HEADER */
 .header {
     text-align: center;
     color: white;
     font-size: 24px;
-    font-weight: bold;
     padding: 20px;
 }
 
-/* CONTAINER */
 .container {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* CARD */
 .card {
     width: 90%;
     max-width: 400px;
@@ -38,7 +34,6 @@ body {
     margin-top: 20px;
 }
 
-/* INPUT */
 input {
     width: 100%;
     padding: 14px;
@@ -46,16 +41,14 @@ input {
     border: none;
 }
 
-/* BUTTON */
 button {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
     border-radius: 12px;
     border: none;
-    background: linear-gradient(135deg, #00c853, #00a651);
+    background: #00a651;
     color: white;
-    font-weight: bold;
 }
 
 /* TICKET */
@@ -68,43 +61,36 @@ button {
     background: white;
 }
 
-/* TOP */
 .top {
-    background: linear-gradient(135deg, #0d47a1, #1976d2);
+    background: #0d47a1;
     color: white;
     text-align: center;
-    padding: 18px;
-    font-size: 22px;
+    padding: 15px;
 }
 
-/* MIDDLE */
 .middle {
     padding: 15px;
-    border-top: 2px dashed #bbb;
     background: #f5f5f5;
+    border-top: 2px dashed #ccc;
 }
 
-/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 12px;
 }
 
 .label { font-size: 12px; color: gray; }
 .value { font-weight: bold; }
 
-/* STATUS */
 .status {
-    margin-top: 12px;
-    padding: 10px;
-    border-radius: 20px;
+    margin-top: 10px;
+    padding: 8px;
     text-align: center;
     background: orange;
-    font-weight: bold;
+    border-radius: 20px;
 }
 
-/* NAV */
 .nav {
     display: flex;
     gap: 10px;
@@ -115,23 +101,14 @@ button {
     width: 50%;
 }
 
-/* QR */
 .qr {
     text-align: center;
     margin-top: 15px;
 }
 
-.qr img {
-    width: 120px;
-    background: white;
-    padding: 5px;
-}
-
-/* PDF BUTTON */
 .pdf-btn {
-    background: linear-gradient(135deg, #ff9800, #ffb74d);
+    background: orange;
 }
-
 </style>
 </head>
 
@@ -150,75 +127,64 @@ button {
 
 </div>
 
-<!-- LIBRARY PDF -->
+<!-- LIBRARY -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 
 <script>
 
-const db = {
-"RVL789": [
-{ nama: "Rivaldi Pratama", seat: "12A" },
-{ nama: "Andi Saputra", seat: "12B" }
-]
-};
-
-const detail = {
-flight: "QG-812",
-dari: "UPG",
-dari_full: "Makassar",
-ke: "DJJ",
-ke_full: "Jayapura",
-tanggal: "10 Apr 2026",
-boarding: "08:30",
-gate: "4",
-terminal: "1",
-status: "Menunggu Pembayaran"
-};
-
+let db = {};
+let current = null;
 let index = 0;
-let list = [];
 
+/* LOAD DATABASE */
+fetch('database.json')
+.then(res => res.json())
+.then(data => db = data);
+
+/* CEK */
 function cek(){
 let pnr = document.getElementById("pnr").value.toUpperCase();
-let h = document.getElementById("hasil");
 
-if(db[pnr]){
-list = db[pnr];
+if(!db[pnr]){
+document.getElementById("hasil").innerHTML = `<div style="color:white;margin-top:20px;">PNR tidak ditemukan</div>`;
+return;
+}
+
+current = db[pnr];
 index = 0;
 render();
-}else{
-h.innerHTML = `<div style="color:white;margin-top:20px;">PNR tidak ditemukan</div>`;
-}
 }
 
+/* RENDER */
 function render(){
-let d = list[index];
+let d = current;
+let p = d.penumpang[index];
 
 document.getElementById("hasil").innerHTML = `
 <div class="ticket" id="ticket">
 
 <div class="top">
-${detail.dari} ✈ ${detail.ke}<br>
-<small>${detail.dari_full} → ${detail.ke_full}</small>
+${d.dari} ✈ ${d.ke}<br>
+<small>${d.kotaDari} → ${d.kotaKe}</small>
 </div>
 
 <div class="middle">
 
 <div class="grid">
-<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
-<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
+<div><div class="label">Nama</div><div class="value">${p.nama}</div></div>
+<div><div class="label">Seat</div><div class="value">${p.seat}</div></div>
 
-<div><div class="label">Flight</div><div class="value">${detail.flight}</div></div>
-<div><div class="label">Tanggal</div><div class="value">${detail.tanggal}</div></div>
+<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
+<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
 
-<div><div class="label">Boarding</div><div class="value">${detail.boarding}</div></div>
-<div><div class="label">Gate</div><div class="value">${detail.gate}</div></div>
+<div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
+<div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
 
-<div><div class="label">Terminal</div><div class="value">${detail.terminal}</div></div>
+<div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
 </div>
 
-<div class="status">${detail.status}</div>
+<div class="status">${d.status}</div>
 
 <div class="nav">
 <button onclick="prev()">⬅ Prev</button>
@@ -226,7 +192,7 @@ ${detail.dari} ✈ ${detail.ke}<br>
 </div>
 
 <div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${d.nama}">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${p.nama}">
 </div>
 
 <button class="pdf-btn" onclick="downloadPDF()">Download PDF</button>
@@ -236,8 +202,9 @@ ${detail.dari} ✈ ${detail.ke}<br>
 `;
 }
 
+/* NAV */
 function next(){
-if(index < list.length-1){
+if(index < current.penumpang.length-1){
 index++;
 render();
 }
@@ -250,21 +217,21 @@ render();
 }
 }
 
-/* DOWNLOAD PDF */
+/* PDF */
 async function downloadPDF(){
 const { jsPDF } = window.jspdf;
 const ticket = document.getElementById("ticket");
 
 const canvas = await html2canvas(ticket);
-const imgData = canvas.toDataURL("image/png");
+const img = canvas.toDataURL("image/png");
 
 const pdf = new jsPDF({
-orientation: "portrait",
-unit: "px",
-format: [canvas.width, canvas.height]
+orientation:"portrait",
+unit:"px",
+format:[canvas.width, canvas.height]
 });
 
-pdf.addImage(imgData, "PNG", 0, 0, canvas.width, canvas.height);
+pdf.addImage(img,"PNG",0,0,canvas.width,canvas.height);
 pdf.save("boarding-pass.pdf");
 }
 
