@@ -3,13 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PNR Multi Passenger</title>
+<title>PNR System</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
     background: linear-gradient(135deg, #0f4c81, #1e90ff);
+    color: white;
 }
 
 /* HEADER */
@@ -17,7 +18,6 @@ body {
     text-align: center;
     padding: 20px;
     font-size: 24px;
-    color: white;
     font-weight: bold;
 }
 
@@ -37,8 +37,10 @@ body {
     background: rgba(255,255,255,0.15);
     backdrop-filter: blur(20px);
     border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 
+/* INPUT */
 input {
     width: 100%;
     padding: 14px;
@@ -46,35 +48,41 @@ input {
     border: none;
 }
 
+/* BUTTON */
 button {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
-    background: #00a651;
+    background: linear-gradient(135deg, #00c853, #00a651);
     color: white;
     border: none;
     border-radius: 12px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* TICKET */
 .ticket {
     margin-top: 20px;
     background: white;
+    color: black;
     border-radius: 20px;
     overflow: hidden;
+    position: relative;
+    animation: fadeIn 0.3s ease;
 }
 
 /* CUT EFFECT */
-.ticket::before, .ticket::after {
+.ticket::before,
+.ticket::after {
     content:"";
     position:absolute;
     width:20px;
     height:20px;
     background:#0f4c81;
     border-radius:50%;
-    top:50%;
+    top:45%;
 }
-
 .ticket::before { left:-10px; }
 .ticket::after { right:-10px; }
 
@@ -84,6 +92,8 @@ button {
     color: white;
     text-align: center;
     padding: 15px;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 /* MIDDLE */
@@ -95,7 +105,7 @@ button {
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 14px;
 }
 
 .label { font-size: 11px; color: gray; }
@@ -107,12 +117,8 @@ button {
     padding: 8px;
     text-align: center;
     border-radius: 20px;
-}
-
-/* QR */
-.qr {
-    text-align: center;
-    padding: 15px;
+    font-size: 13px;
+    font-weight: bold;
 }
 
 /* NAV */
@@ -121,18 +127,44 @@ button {
     justify-content: space-between;
     margin-top: 10px;
 }
+
+.nav button {
+    width: 48%;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+/* QR */
+.qr {
+    text-align: center;
+    padding: 15px;
+}
+
+/* ANIMATION */
+@keyframes fadeIn {
+    from { opacity:0; transform:translateY(10px);}
+    to { opacity:1; transform:translateY(0);}
+}
+
+/* ERROR */
+.error {
+    margin-top: 15px;
+    text-align: center;
+    color: red;
+    font-weight: bold;
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ PNR Checker</div>
+<div class="header">✈️ PNR System</div>
 
 <div class="container">
 <div class="card">
 
 <input id="pnr" placeholder="Masukkan kode booking">
-<button onclick="cek()">Cek</button>
+<button onclick="cekPNR()">Cek</button>
 
 <div id="hasil"></div>
 
@@ -141,14 +173,14 @@ button {
 
 <script>
 
-const data = {
-
+/* DATABASE SIMULASI */
+const db = {
 "RVL789": {
+flight: "QG-812",
 dari: "UPG",
 ke: "DJJ",
 kotaDari: "Makassar",
 kotaKe: "Jayapura",
-flight: "QG-812",
 tanggal: "10 Apr 2026",
 boarding: "08:30",
 gate: "4",
@@ -160,29 +192,35 @@ penumpang: [
 { nama: "Andi Saputra", seat: "12B" },
 { nama: "Budi Hartono", seat: "12C" }
 ]
-
 }
-
 };
 
+let current = null;
 let index = 0;
-let currentPNR = null;
 
-function cek(){
-let pnr = document.getElementById("pnr").value.toUpperCase();
-if(data[pnr]){
-currentPNR = data[pnr];
+/* CEK PNR */
+function cekPNR(){
+const input = document.getElementById("pnr").value.toUpperCase();
+const hasil = document.getElementById("hasil");
+
+if(!db[input]){
+hasil.innerHTML = `<div class="error">PNR tidak ditemukan</div>`;
+return;
+}
+
+current = db[input];
 index = 0;
 render();
 }
-}
 
+/* RENDER */
 function render(){
-let d = currentPNR;
-let p = d.penumpang[index];
+const d = current;
+const p = d.penumpang[index];
 
-let warna = "orange";
+let warna = "#ff9800";
 if(d.status === "Confirmed") warna = "#00c853";
+if(d.status === "Cancelled") warna = "#f44336";
 
 document.getElementById("hasil").innerHTML = `
 <div class="ticket">
@@ -212,8 +250,8 @@ ${d.status}
 </div>
 
 <div class="nav">
-<button onclick="prev()">⬅️</button>
-<button onclick="next()">➡️</button>
+<button onclick="prev()">⬅ Prev</button>
+<button onclick="next()">Next ➡</button>
 </div>
 
 </div>
@@ -226,8 +264,9 @@ ${d.status}
 `;
 }
 
+/* NAVIGASI */
 function next(){
-if(index < currentPNR.penumpang.length - 1){
+if(index < current.penumpang.length - 1){
 index++;
 render();
 }
