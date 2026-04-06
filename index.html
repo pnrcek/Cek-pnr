@@ -3,43 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PNR Airline System</title>
+<title>Cek Tiket</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0d47a1, #42a5f5);
+    background: linear-gradient(135deg,#0d47a1,#42a5f5);
     color: white;
 }
 
 .header {
     text-align: center;
-    font-size: 24px;
     padding: 20px;
+    font-size: 22px;
     font-weight: bold;
 }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* CARD */
-.card {
-    width: 90%;
+.search {
     max-width: 400px;
-    background: rgba(255,255,255,0.15);
-    padding: 20px;
-    border-radius: 20px;
-    margin-top: 15px;
+    margin: auto;
+    padding: 15px;
 }
 
 input {
     width: 100%;
     padding: 12px;
-    margin-top: 8px;
     border-radius: 10px;
     border: none;
 }
@@ -55,15 +44,18 @@ button {
     font-weight: bold;
 }
 
-/* TICKET */
 .ticket {
-    width: 90%;
     max-width: 400px;
-    margin-top: 20px;
+    margin: 20px auto;
     border-radius: 20px;
     overflow: hidden;
     background: white;
     color: black;
+}
+
+.top {
+    padding: 15px;
+    color: white;
 }
 
 .middle {
@@ -80,143 +72,69 @@ button {
 .label { font-size: 12px; color: gray; }
 .value { font-weight: bold; }
 
-.nav {
-    display: flex;
-    gap: 10px;
+.status {
+    text-align: center;
+    padding: 10px;
+    border-radius: 20px;
     margin-top: 10px;
-}
-
-.nav button {
-    width: 50%;
+    font-weight: bold;
 }
 
 .qr {
     text-align: center;
-    margin-top: 15px;
-}
-
-.pdf-btn {
-    background: orange;
-}
-
-.admin {
-    background: #222;
+    margin-top: 10px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ Airline PNR System</div>
+<div class="header">✈️ Cek Tiket</div>
 
-<div class="container">
-
-<!-- CEK -->
-<div class="card">
+<div class="search">
 <input id="pnr" placeholder="Masukkan kode booking">
-<button onclick="cek()">Cek Tiket</button>
-</div>
-
-<!-- ADMIN -->
-<div class="card">
-<h3>Admin Input</h3>
-
-<input id="a_pnr" placeholder="PNR">
-<input id="a_maskapai" placeholder="Maskapai (Lion Air / Citilink)">
-<input id="a_nama" placeholder="Nama">
-<input id="a_seat" placeholder="Seat">
-<input id="a_flight" placeholder="Flight">
-<input id="a_dari" placeholder="Dari (UPG)">
-<input id="a_ke" placeholder="Ke (CGK)">
-<input id="a_tanggal" placeholder="Tanggal">
-<input id="a_boarding" placeholder="Boarding">
-<input id="a_gate" placeholder="Gate">
-<input id="a_terminal" placeholder="Terminal">
-<input id="a_status" placeholder="Status">
-
-<button class="admin" onclick="simpan()">Simpan Tiket</button>
+<button onclick="cek()">Cek</button>
 </div>
 
 <div id="hasil"></div>
 
-</div>
-
-<!-- LIBRARY -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
 <script>
-
-let current = null;
-let index = 0;
-
-/* SIMPAN */
-function simpan(){
-let pnr = document.getElementById("a_pnr").value.toUpperCase();
-
-let data = {
-maskapai: document.getElementById("a_maskapai").value,
-flight: document.getElementById("a_flight").value,
-dari: document.getElementById("a_dari").value,
-ke: document.getElementById("a_ke").value,
-tanggal: document.getElementById("a_tanggal").value,
-boarding: document.getElementById("a_boarding").value,
-gate: document.getElementById("a_gate").value,
-terminal: document.getElementById("a_terminal").value,
-status: document.getElementById("a_status").value,
-penumpang: [
-{
-nama: document.getElementById("a_nama").value,
-seat: document.getElementById("a_seat").value
-}
-]
+// 🔥 CONFIG
+const firebaseConfig = {
+  apiKey: "ISI_APIKEY",
+  authDomain: "ISI_DOMAIN",
+  projectId: "ISI_PROJECT_ID",
 };
 
-localStorage.setItem(pnr, JSON.stringify(data));
-alert("Tiket berhasil disimpan!");
-}
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-/* CEK */
-function cek(){
+async function cek(){
 let pnr = document.getElementById("pnr").value.toUpperCase();
-let data = localStorage.getItem(pnr);
 
-if(!data){
-document.getElementById("hasil").innerHTML = `<div style="margin-top:20px;">PNR tidak ditemukan</div>`;
+let doc = await db.collection("tickets").doc(pnr).get();
+
+if(!doc.exists){
+document.getElementById("hasil").innerHTML = "❌ PNR tidak ditemukan";
 return;
 }
 
-current = JSON.parse(data);
-index = 0;
-render();
-}
+let d = doc.data();
+let p = d.penumpang[0];
 
-/* RENDER */
-function render(){
-let d = current;
-let p = d.penumpang[index];
-
-let color = "#0d47a1";
-let logo = "✈️";
-
-if(d.maskapai){
-if(d.maskapai.toLowerCase().includes("lion")){color="#d32f2f"; logo="🦁";}
-if(d.maskapai.toLowerCase().includes("citilink")){color="#00c853"; logo="🟢";}
-if(d.maskapai.toLowerCase().includes("garuda")){color="#1565c0"; logo="🕊️";}
-}
-
-let statusColor = "orange";
-if(d.status.toLowerCase().includes("confirmed")) statusColor="#00e676";
-if(d.status.toLowerCase().includes("boarding")) statusColor="#ffea00";
-if(d.status.toLowerCase().includes("departed")) statusColor="#00c853";
+let warna = "#1565c0";
+if(d.maskapai.toLowerCase().includes("lion")) warna="#d32f2f";
+if(d.maskapai.toLowerCase().includes("citilink")) warna="#00c853";
 
 document.getElementById("hasil").innerHTML = `
-<div class="ticket" id="ticket">
+<div class="ticket">
 
-<div style="background:${color};color:white;padding:15px;">
-<b>${logo} ${d.maskapai || "Airline"}</b><br>
-<b style="font-size:20px">${d.dari} ✈ ${d.ke}</b><br>
-<small>BOARDING PASS</small>
+<div class="top" style="background:${warna}">
+<b>${d.maskapai}</b><br>
+<b style="font-size:20px">${d.dari} → ${d.ke}</b>
 </div>
 
 <div class="middle">
@@ -234,53 +152,16 @@ document.getElementById("hasil").innerHTML = `
 <div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
 </div>
 
-<div style="margin-top:10px;padding:10px;background:${statusColor};text-align:center;border-radius:20px;">
-${d.status}
-</div>
-
-<div class="nav">
-<button onclick="prev()">⬅ Prev</button>
-<button onclick="next()">Next ➡</button>
-</div>
+<div class="status">${d.status}</div>
 
 <div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${p.nama}-${d.flight}">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${pnr}">
 </div>
-
-<button class="pdf-btn" onclick="downloadPDF()">Download Ticket</button>
 
 </div>
 </div>
 `;
 }
-
-/* NAV */
-function next(){
-if(index < current.penumpang.length-1){ index++; render(); }
-}
-
-function prev(){
-if(index > 0){ index--; render(); }
-}
-
-/* PDF */
-async function downloadPDF(){
-const { jsPDF } = window.jspdf;
-const ticket = document.getElementById("ticket");
-
-const canvas = await html2canvas(ticket);
-const img = canvas.toDataURL("image/png");
-
-const pdf = new jsPDF({
-orientation:"portrait",
-unit:"px",
-format:[canvas.width, canvas.height]
-});
-
-pdf.addImage(img,"PNG",0,0,canvas.width,canvas.height);
-pdf.save("boarding-pass.pdf");
-}
-
 </script>
 
 </body>
