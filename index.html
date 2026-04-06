@@ -25,30 +25,32 @@ body {
     align-items: center;
 }
 
+/* INPUT */
 .card {
     width: 90%;
     max-width: 400px;
     background: rgba(255,255,255,0.15);
     padding: 20px;
     border-radius: 20px;
-    margin-top: 20px;
 }
 
 input {
     width: 100%;
-    padding: 14px;
-    border-radius: 12px;
+    padding: 12px;
+    margin-top: 8px;
+    border-radius: 10px;
     border: none;
 }
 
 button {
     width: 100%;
-    padding: 14px;
+    padding: 12px;
     margin-top: 10px;
-    border-radius: 12px;
+    border-radius: 10px;
     border: none;
-    background: #00a651;
+    background: #00c853;
     color: white;
+    font-weight: bold;
 }
 
 /* TICKET */
@@ -77,7 +79,7 @@ button {
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 10px;
 }
 
 .label { font-size: 12px; color: gray; }
@@ -109,18 +111,43 @@ button {
 .pdf-btn {
     background: orange;
 }
+
+.admin {
+    background: #222;
+    margin-top: 15px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ Boarding Pass</div>
+<div class="header">✈️ PNR System</div>
 
 <div class="container">
 
+<!-- INPUT PNR -->
 <div class="card">
 <input id="pnr" placeholder="Masukkan kode booking">
-<button onclick="cek()">Cek</button>
+<button onclick="cek()">Cek Tiket</button>
+</div>
+
+<!-- ADMIN INPUT -->
+<div class="card">
+<h3 style="color:white;">Admin Input</h3>
+
+<input id="a_pnr" placeholder="PNR">
+<input id="a_nama" placeholder="Nama">
+<input id="a_seat" placeholder="Seat">
+<input id="a_flight" placeholder="Flight">
+<input id="a_dari" placeholder="Dari">
+<input id="a_ke" placeholder="Ke">
+<input id="a_tanggal" placeholder="Tanggal">
+<input id="a_boarding" placeholder="Boarding">
+<input id="a_gate" placeholder="Gate">
+<input id="a_terminal" placeholder="Terminal">
+<input id="a_status" placeholder="Status">
+
+<button class="admin" onclick="simpan()">Simpan Tiket</button>
 </div>
 
 <div id="hasil"></div>
@@ -133,27 +160,48 @@ button {
 
 <script>
 
-let db = {};
 let current = null;
 let index = 0;
 
-/* LOAD DATABASE */
-fetch('database.json')
-.then(res => res.json())
-.then(data => db = data);
-
-/* CEK */
+/* CEK PNR */
 function cek(){
 let pnr = document.getElementById("pnr").value.toUpperCase();
+let data = localStorage.getItem(pnr);
 
-if(!db[pnr]){
-document.getElementById("hasil").innerHTML = `<div style="color:white;margin-top:20px;">PNR tidak ditemukan</div>`;
+if(!data){
+document.getElementById("hasil").innerHTML = `<div style="color:white">PNR tidak ditemukan</div>`;
 return;
 }
 
-current = db[pnr];
+current = JSON.parse(data);
 index = 0;
 render();
+}
+
+/* SIMPAN DATA (ADMIN) */
+function simpan(){
+let pnr = document.getElementById("a_pnr").value.toUpperCase();
+
+let data = {
+flight: document.getElementById("a_flight").value,
+dari: document.getElementById("a_dari").value,
+ke: document.getElementById("a_ke").value,
+tanggal: document.getElementById("a_tanggal").value,
+boarding: document.getElementById("a_boarding").value,
+gate: document.getElementById("a_gate").value,
+terminal: document.getElementById("a_terminal").value,
+status: document.getElementById("a_status").value,
+penumpang: [
+{
+nama: document.getElementById("a_nama").value,
+seat: document.getElementById("a_seat").value
+}
+]
+};
+
+localStorage.setItem(pnr, JSON.stringify(data));
+
+alert("Tiket tersimpan!");
 }
 
 /* RENDER */
@@ -165,8 +213,7 @@ document.getElementById("hasil").innerHTML = `
 <div class="ticket" id="ticket">
 
 <div class="top">
-${d.dari} ✈ ${d.ke}<br>
-<small>${d.kotaDari} → ${d.kotaKe}</small>
+${d.dari} ✈ ${d.ke}
 </div>
 
 <div class="middle">
