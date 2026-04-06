@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PNR Airline Check</title>
+<title>Airline PNR</title>
 
 <style>
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg,#0d47a1,#1e88e5);
-    color: white;
+    background: linear-gradient(135deg,#dbeafe,#f0f9ff);
 }
 
 /* HEADER */
@@ -19,13 +18,22 @@ body {
     padding: 20px;
     font-size: 22px;
     font-weight: bold;
+    color: #0d47a1;
 }
 
-/* SEARCH */
-.search-box {
-    max-width: 400px;
+/* SEARCH GLASS */
+.search {
+    max-width: 420px;
     margin: auto;
     padding: 15px;
+}
+
+.search-box {
+    backdrop-filter: blur(20px);
+    background: rgba(255,255,255,0.3);
+    padding: 15px;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
 input {
@@ -33,7 +41,7 @@ input {
     padding: 14px;
     border-radius: 12px;
     border: none;
-    font-size: 16px;
+    outline: none;
 }
 
 button {
@@ -42,45 +50,43 @@ button {
     margin-top: 10px;
     border-radius: 12px;
     border: none;
-    background: #00c853;
+    background: linear-gradient(135deg,#00c853,#00e676);
     color: white;
     font-weight: bold;
-    font-size: 16px;
 }
 
-/* TICKET CARD */
+/* TICKET */
 .ticket {
     max-width: 420px;
     margin: 20px auto;
-    border-radius: 20px;
+    border-radius: 25px;
     overflow: hidden;
-    background: white;
-    color: black;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-    animation: fadeIn 0.4s ease;
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+    animation: fade 0.4s ease;
 }
 
-@keyframes fadeIn {
+@keyframes fade {
     from {opacity:0; transform:translateY(20px);}
-    to {opacity:1; transform:translateY(0);}
+    to {opacity:1;}
 }
 
 /* TOP */
 .top {
     padding: 20px;
-    color: white;
+    color: #0d47a1;
+    background: linear-gradient(135deg,#e3f2fd,#bbdefb);
 }
 
-/* ROUTE */
 .route {
     font-size: 26px;
     font-weight: bold;
 }
 
-/* MIDDLE */
+/* CONTENT */
 .middle {
     padding: 15px;
-    background: #f5f5f5;
 }
 
 /* GRID */
@@ -92,7 +98,7 @@ button {
 
 .label {
     font-size: 11px;
-    color: gray;
+    color: #666;
 }
 
 .value {
@@ -104,9 +110,11 @@ button {
 .status {
     margin-top: 12px;
     padding: 10px;
-    text-align: center;
     border-radius: 20px;
+    text-align: center;
     font-weight: bold;
+    background: #fff3cd;
+    color: #856404;
 }
 
 /* QR */
@@ -115,23 +123,24 @@ button {
     margin-top: 15px;
 }
 
-/* FOOTER */
 .footer {
-    padding: 12px;
     text-align: center;
+    padding: 10px;
     font-size: 12px;
-    color: gray;
+    color: #888;
 }
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ Airline PNR Check</div>
+<div class="header">✈️ Airline Ticket</div>
 
+<div class="search">
 <div class="search-box">
 <input id="pnr" placeholder="Masukkan kode booking">
 <button onclick="cek()">Cek Tiket</button>
+</div>
 </div>
 
 <div id="hasil"></div>
@@ -142,7 +151,7 @@ button {
 
 <script>
 
-// 🔥 CONFIG FIREBASE
+// CONFIG
 const firebaseConfig = {
   apiKey: "ISI_APIKEY",
   authDomain: "ISI_DOMAIN",
@@ -152,12 +161,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-// FORMAT NAMA
+// FORMAT
 function proper(text){
 return text.toLowerCase().replace(/\b\w/g,c=>c.toUpperCase());
 }
 
-// CEK DATA
+// CEK
 async function cek(){
 
 let pnr = document.getElementById("pnr").value.toUpperCase();
@@ -166,29 +175,18 @@ let doc = await db.collection("tickets").doc(pnr).get();
 
 if(!doc.exists){
 document.getElementById("hasil").innerHTML =
-"<div style='text-align:center;margin-top:20px'>❌ PNR tidak ditemukan</div>";
+"<div style='text-align:center;margin-top:20px;color:#555'>PNR tidak ditemukan</div>";
 return;
 }
 
 let d = doc.data();
 let p = d.penumpang[0];
 
-// WARNA MASKAPAI
-let color = "#1565c0";
-if(d.maskapai.toLowerCase().includes("lion")) color="#d32f2f";
-if(d.maskapai.toLowerCase().includes("citilink")) color="#00c853";
-if(d.maskapai.toLowerCase().includes("garuda")) color="#0d47a1";
-
-// STATUS COLOR
-let statusColor = "#ff9800";
-if(d.status.toLowerCase().includes("confirmed")) statusColor="#00e676";
-if(d.status.toLowerCase().includes("boarding")) statusColor="#ffeb3b";
-
 // RENDER
 document.getElementById("hasil").innerHTML = `
 <div class="ticket">
 
-<div class="top" style="background:${color}">
+<div class="top">
 <div>${d.maskapai}</div>
 <div class="route">${d.dari} ✈ ${d.ke}</div>
 </div>
@@ -208,9 +206,7 @@ document.getElementById("hasil").innerHTML = `
 <div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
 </div>
 
-<div class="status" style="background:${statusColor}">
-${d.status}
-</div>
+<div class="status">${d.status}</div>
 
 <div class="qr">
 <img src="https://api.qrserver.com/v1/create-qr-code/?size=160x160&data=${pnr}">
@@ -218,14 +214,12 @@ ${d.status}
 
 </div>
 
-<div class="footer">
-Show this QR at boarding gate
-</div>
+<div class="footer">Show this QR at boarding gate</div>
 
 </div>
 `;
-
 }
+
 </script>
 
 </body>
