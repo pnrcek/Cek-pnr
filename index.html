@@ -7,7 +7,7 @@
 body {
     font-family: 'Segoe UI', sans-serif;
     margin: 0;
-    background: #cc0000; /* merah polos */
+    background: #cc0000;
 }
 
 /* container */
@@ -20,7 +20,7 @@ body {
 
 /* card */
 .card {
-    background: rgba(255,255,255,0.95);
+    background: white;
     padding: 30px;
     border-radius: 16px;
     width: 350px;
@@ -31,20 +31,13 @@ body {
 /* logo */
 .logo {
     width: 110px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 /* title */
 h2 {
+    color: #cc0000;
     margin-bottom: 10px;
-    color: #b30000;
-}
-
-/* subtitle */
-.subtitle {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 20px;
 }
 
 /* input */
@@ -54,12 +47,6 @@ input {
     margin: 10px 0;
     border-radius: 10px;
     border: 1px solid #ccc;
-    outline: none;
-    font-size: 15px;
-}
-
-input:focus {
-    border-color: red;
 }
 
 /* button */
@@ -73,16 +60,14 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background: #ff1a1a;
-}
-
-/* result */
+/* result box */
 #hasil {
     margin-top: 20px;
-    padding: 10px;
+    padding: 15px;
     border-radius: 10px;
-    font-weight: bold;
+    text-align: left;
+    font-size: 14px;
+    background: #f5f5f5;
 }
 </style>
 
@@ -97,9 +82,8 @@ button:hover {
 <img class="logo" src="https://upload.wikimedia.org/wikipedia/commons/0/0c/Lion_Air_logo.svg">
 
 <h2>Cek PNR</h2>
-<p class="subtitle">Masukkan kode booking Anda</p>
 
-<input type="text" id="pnr" placeholder="Contoh: ABC123">
+<input type="text" id="pnr" placeholder="Masukkan Kode PNR">
 
 <button onclick="cek()">Cek Status</button>
 
@@ -112,10 +96,30 @@ button:hover {
 <script>
 
 const data = {
-"FAQ765": { nama: "aldi", status: "menunggu pembayaran" },
-"XYZ789": { nama: "Andi", status: "Boarding" },
-"QWE456": { nama: "Siti", status: "Delayed" },
-"RTY321": { nama: "Joko", status: "Cancelled" }
+"ABC123": {
+    nama: "Budi Santoso",
+    status: "Confirmed",
+    jam: "08:30",
+    gate: "A1"
+},
+"XYZ789": {
+    nama: "Andi Wijaya",
+    status: "Boarding",
+    jam: "10:15",
+    gate: "B3"
+},
+"QWE456": {
+    nama: "Siti Aminah",
+    status: "Delayed",
+    jam: "12:45",
+    gate: "C2"
+},
+"RTY321": {
+    nama: "Joko Prasetyo",
+    status: "Cancelled",
+    jam: "15:00",
+    gate: "D4"
+}
 };
 
 function cek() {
@@ -125,21 +129,28 @@ function cek() {
     hasil.innerHTML = "⏳ Mengecek...";
 
     setTimeout(() => {
+
         if (data[pnr]) {
-            let status = data[pnr].status;
+
+            let d = data[pnr];
             let warna = "black";
 
-            if (status === "Confirmed") warna = "green";
-            if (status === "Boarding") warna = "blue";
-            if (status === "menunggu pembayaran") warna = "orange";
-            if (status === "Cancelled") warna = "red";
+            if (d.status === "Confirmed") warna = "green";
+            if (d.status === "Boarding") warna = "blue";
+            if (d.status === "Delayed") warna = "orange";
+            if (d.status === "Cancelled") warna = "red";
 
-            hasil.innerHTML =
-                "✔ " + data[pnr].nama +
-                "<br>Status: <span style='color:" + warna + "'>" + status + "</span>";
+            hasil.innerHTML = `
+            <b>Nama:</b> ${d.nama}<br>
+            <b>Status:</b> <span style="color:${warna}">${d.status}</span><br>
+            <b>Jam Berangkat:</b> ${d.jam}<br>
+            <b>Gate:</b> ${d.gate}
+            `;
+
         } else {
             hasil.innerHTML = "<span style='color:red'>PNR tidak ditemukan</span>";
         }
+
     }, 800);
 }
 
