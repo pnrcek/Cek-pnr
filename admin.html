@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Panel</title>
+
+<style>
+body {
+    font-family: sans-serif;
+    background: #0d47a1;
+    color: white;
+    padding: 20px;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border-radius: 8px;
+    border: none;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #00c853;
+    border: none;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+
+<h2>✈️ Admin Input Tiket</h2>
+
+<input id="pnr" placeholder="Kode PNR (contoh: RVL999)">
+<input id="nama" placeholder="Nama Penumpang">
+<input id="seat" placeholder="Seat (contoh: 12A)">
+<input id="flight" placeholder="Flight">
+<input id="dari" placeholder="Dari (UPG)">
+<input id="ke" placeholder="Ke (DJJ)">
+<input id="tanggal" placeholder="Tanggal">
+<input id="boarding" placeholder="Boarding">
+<input id="gate" placeholder="Gate">
+<input id="terminal" placeholder="Terminal">
+<input id="status" placeholder="Status">
+
+<button onclick="simpan()">Simpan Tiket</button>
+
+<script>
+function simpan(){
+let pnr = document.getElementById("pnr").value.toUpperCase();
+
+let data = {
+flight: document.getElementById("flight").value,
+dari: document.getElementById("dari").value,
+ke: document.getElementById("ke").value,
+tanggal: document.getElementById("tanggal").value,
+boarding: document.getElementById("boarding").value,
+gate: document.getElementById("gate").value,
+terminal: document.getElementById("terminal").value,
+status: document.getElementById("status").value,
+penumpang: [
+{
+nama: document.getElementById("nama").value,
+seat: document.getElementById("seat").value
+}
+]
+};
+
+localStorage.setItem(pnr, JSON.stringify(data));
+
+alert("Tiket berhasil disimpan!");
+}
+</script>
+
+</body>
+</html>
