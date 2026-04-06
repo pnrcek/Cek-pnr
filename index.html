@@ -11,8 +11,8 @@ body {
     font-family: 'Segoe UI', sans-serif;
 
     background:
-    linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
-    url('https://images.unsplash.com/photo-1494412574643-ffbb57d2c2b3?auto=format&fit=crop&w=1470&q=80');
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
 
     background-size: cover;
     background-position: center;
@@ -23,7 +23,7 @@ body {
 .header {
     text-align: center;
     color: white;
-    font-size: 22px;
+    font-size: 24px;
     font-weight: bold;
     padding: 20px;
 }
@@ -47,8 +47,6 @@ body {
 
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     color: white;
-
-    animation: fadeIn 0.8s ease;
 }
 
 /* INPUT */
@@ -66,7 +64,7 @@ button {
     padding: 12px;
     margin-top: 10px;
 
-    background: #cc0000;
+    background: #e60000;
     color: white;
 
     border: none;
@@ -77,8 +75,14 @@ button {
     transition: 0.3s;
 }
 
-button:hover { transform: scale(1.05); background: #ff0000; }
-button:active { transform: scale(0.95); }
+button:hover {
+    background: #ff0000;
+    transform: scale(1.05);
+}
+
+button:active {
+    transform: scale(0.95);
+}
 
 /* RESULT */
 .result {
@@ -86,7 +90,6 @@ button:active { transform: scale(0.95); }
     padding: 15px;
     border-radius: 12px;
     background: rgba(255,255,255,0.2);
-    animation: slideUp 0.5s ease;
 }
 
 /* GRID */
@@ -117,17 +120,6 @@ button:active { transform: scale(0.95); }
 .orange { background: orange; color: black; }
 .red { background: red; color: white; }
 
-/* ANIMASI */
-@keyframes fadeIn {
-    from {opacity: 0;}
-    to {opacity: 1;}
-}
-
-@keyframes slideUp {
-    from {opacity: 0; transform: translateY(20px);}
-    to {opacity: 1; transform: translateY(0);}
-}
-
 .loading {
     text-align: center;
     margin-top: 15px;
@@ -152,15 +144,14 @@ button:active { transform: scale(0.95); }
 
 <script>
 
-/* DATABASE SIMULASI */
 const data = {
 
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
 flight: "JT-610",
-dari: "CGK",
-ke: "DPS",
+dari: "CGK (Jakarta)",
+ke: "DPS (Bali)",
 jam: "08:30",
 status: "Confirmed"
 },
@@ -169,8 +160,8 @@ status: "Confirmed"
 nama: "Andi Saputra",
 maskapai: "Garuda Indonesia",
 flight: "GA-200",
-dari: "CGK",
-ke: "SUB",
+dari: "CGK (Jakarta)",
+ke: "SUB (Surabaya)",
 jam: "13:45",
 status: "Menunggu Pembayaran"
 },
@@ -179,15 +170,14 @@ status: "Menunggu Pembayaran"
 nama: "Siti Aminah",
 maskapai: "AirAsia",
 flight: "AK-101",
-dari: "KUL",
-ke: "CGK",
+dari: "KUL (Malaysia)",
+ke: "CGK (Jakarta)",
 jam: "17:20",
 status: "Confirmed"
 }
 
 };
 
-/* FUNCTION */
 function cek(){
 
 let pnr = document.getElementById("pnr").value.toUpperCase();
