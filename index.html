@@ -6,19 +6,20 @@
 <title>PNR System</title>
 
 <style>
+
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-    background: linear-gradient(135deg, #0f4c81, #1e90ff);
-    color: white;
+    background: linear-gradient(135deg, #0d47a1, #42a5f5);
 }
 
 /* HEADER */
 .header {
     text-align: center;
-    padding: 20px;
+    color: white;
     font-size: 24px;
     font-weight: bold;
+    padding: 20px;
 }
 
 /* CONTAINER */
@@ -26,133 +27,117 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 75vh;
+    flex-direction: column;
 }
 
-/* INPUT CARD */
+/* CARD INPUT */
 .card {
-    width: 380px;
-    padding: 20px;
-    border-radius: 25px;
+    width: 90%;
+    max-width: 400px;
     background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(20px);
-    border: 1px solid rgba(255,255,255,0.3);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    padding: 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
 }
 
-/* INPUT */
 input {
     width: 100%;
     padding: 14px;
     border-radius: 12px;
     border: none;
+    font-size: 16px;
 }
 
-/* BUTTON */
 button {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
+    border-radius: 12px;
+    border: none;
     background: linear-gradient(135deg, #00c853, #00a651);
     color: white;
-    border: none;
-    border-radius: 12px;
+    font-size: 16px;
     font-weight: bold;
-    cursor: pointer;
 }
 
 /* TICKET */
 .ticket {
+    width: 90%;
+    max-width: 400px;
     margin-top: 20px;
-    background: white;
-    color: black;
     border-radius: 20px;
     overflow: hidden;
-    position: relative;
-    animation: fadeIn 0.3s ease;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
 }
-
-/* CUT EFFECT */
-.ticket::before,
-.ticket::after {
-    content:"";
-    position:absolute;
-    width:20px;
-    height:20px;
-    background:#0f4c81;
-    border-radius:50%;
-    top:45%;
-}
-.ticket::before { left:-10px; }
-.ticket::after { right:-10px; }
 
 /* TOP */
 .top {
-    background: linear-gradient(135deg, #0f4c81, #1565c0);
+    background: linear-gradient(135deg, #0d47a1, #1976d2);
     color: white;
     text-align: center;
-    padding: 15px;
+    padding: 18px;
     font-size: 22px;
     font-weight: bold;
 }
 
 /* MIDDLE */
 .middle {
+    background: #f5f5f5;
     padding: 15px;
-    border-top: 2px dashed #ccc;
+    border-top: 2px dashed #bbb;
 }
 
+/* GRID */
 .grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 16px;
 }
 
-.label { font-size: 11px; color: gray; }
-.value { font-weight: bold; }
+.label {
+    font-size: 12px;
+    color: gray;
+}
+
+.value {
+    font-weight: bold;
+}
 
 /* STATUS */
 .status {
-    margin-top: 10px;
-    padding: 8px;
-    text-align: center;
-    border-radius: 20px;
-    font-size: 13px;
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 25px;
     font-weight: bold;
+    text-align: center;
+    background: linear-gradient(135deg, orange, #ffcc80);
 }
 
 /* NAV */
 .nav {
     display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
+    gap: 10px;
+    margin-top: 15px;
 }
 
 .nav button {
     width: 48%;
-    padding: 10px;
-    border-radius: 10px;
 }
 
 /* QR */
 .qr {
     text-align: center;
-    padding: 15px;
-}
-
-/* ANIMATION */
-@keyframes fadeIn {
-    from { opacity:0; transform:translateY(10px);}
-    to { opacity:1; transform:translateY(0);}
-}
-
-/* ERROR */
-.error {
     margin-top: 15px;
-    text-align: center;
-    color: red;
-    font-weight: bold;
 }
+
+.qr img {
+    width: 120px;
+    background: white;
+    padding: 8px;
+    border-radius: 10px;
+}
+
 </style>
 </head>
 
@@ -161,112 +146,105 @@ button {
 <div class="header">✈️ PNR System</div>
 
 <div class="container">
-<div class="card">
 
+<div class="card">
 <input id="pnr" placeholder="Masukkan kode booking">
-<button onclick="cekPNR()">Cek</button>
+<button onclick="cek()">Cek</button>
+</div>
 
 <div id="hasil"></div>
 
 </div>
-</div>
 
 <script>
 
-/* DATABASE SIMULASI */
-const db = {
-"RVL789": {
+const database = {
+"RVL789": [
+{
+nama: "Rivaldi Pratama",
+seat: "12A"
+},
+{
+nama: "Andi Saputra",
+seat: "12B"
+}
+]
+};
+
+const detail = {
 flight: "QG-812",
 dari: "UPG",
+dari_full: "Makassar",
 ke: "DJJ",
-kotaDari: "Makassar",
-kotaKe: "Jayapura",
+ke_full: "Jayapura",
 tanggal: "10 Apr 2026",
 boarding: "08:30",
 gate: "4",
 terminal: "1",
-status: "Menunggu Pembayaran",
-
-penumpang: [
-{ nama: "Rivaldi Pratama", seat: "12A" },
-{ nama: "Andi Saputra", seat: "12B" },
-{ nama: "Budi Hartono", seat: "12C" }
-]
-}
+status: "Menunggu Pembayaran"
 };
 
-let current = null;
 let index = 0;
+let list = [];
 
-/* CEK PNR */
-function cekPNR(){
-const input = document.getElementById("pnr").value.toUpperCase();
-const hasil = document.getElementById("hasil");
+function cek(){
+let pnr = document.getElementById("pnr").value.toUpperCase();
+let h = document.getElementById("hasil");
 
-if(!db[input]){
-hasil.innerHTML = `<div class="error">PNR tidak ditemukan</div>`;
-return;
-}
-
-current = db[input];
+if(database[pnr]){
+list = database[pnr];
 index = 0;
 render();
+}else{
+h.innerHTML = `<div style="color:white;margin-top:20px;">PNR tidak ditemukan</div>`;
+}
 }
 
-/* RENDER */
 function render(){
-const d = current;
-const p = d.penumpang[index];
 
-let warna = "#ff9800";
-if(d.status === "Confirmed") warna = "#00c853";
-if(d.status === "Cancelled") warna = "#f44336";
+let d = list[index];
 
 document.getElementById("hasil").innerHTML = `
 <div class="ticket">
 
 <div class="top">
-${d.dari} ✈ ${d.ke}<br>
-<small>${d.kotaDari} → ${d.kotaKe}</small>
+${detail.dari} ✈ ${detail.ke}<br>
+<small>${detail.dari_full} → ${detail.ke_full}</small>
 </div>
 
 <div class="middle">
 
 <div class="grid">
-<div><div class="label">Nama</div><div class="value">${p.nama}</div></div>
-<div><div class="label">Seat</div><div class="value">${p.seat}</div></div>
+<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
+<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
 
-<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
+<div><div class="label">Flight</div><div class="value">${detail.flight}</div></div>
+<div><div class="label">Tanggal</div><div class="value">${detail.tanggal}</div></div>
 
-<div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
-<div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
+<div><div class="label">Boarding</div><div class="value">${detail.boarding}</div></div>
+<div><div class="label">Gate</div><div class="value">${detail.gate}</div></div>
 
-<div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
+<div><div class="label">Terminal</div><div class="value">${detail.terminal}</div></div>
 </div>
 
-<div class="status" style="background:${warna}">
-${d.status}
-</div>
+<div class="status">${detail.status}</div>
 
 <div class="nav">
 <button onclick="prev()">⬅ Prev</button>
 <button onclick="next()">Next ➡</button>
 </div>
 
-</div>
-
 <div class="qr">
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${p.nama}">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${d.nama}">
 </div>
 
+</div>
 </div>
 `;
 }
 
-/* NAVIGASI */
 function next(){
-if(index < current.penumpang.length - 1){
+if(index < list.length-1){
 index++;
 render();
 }
