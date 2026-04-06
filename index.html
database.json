@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PNR System</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #0f4c81, #1e90ff);
+}
+
+/* HEADER */
+.header {
+    text-align: center;
+    padding: 20px;
+    font-size: 24px;
+    color: white;
+    font-weight: bold;
+}
+
+/* CONTAINER */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 75vh;
+}
+
+/* CARD */
+.card {
+    width: 380px;
+    padding: 20px;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(20px);
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+}
+
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 10px;
+    background: #00a651;
+    color: white;
+    border: none;
+    border-radius: 12px;
+}
+
+/* TICKET */
+.ticket {
+    margin-top: 20px;
+    background: white;
+    color: black;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+/* CUT EFFECT */
+.ticket::before,
+.ticket::after {
+    content:"";
+    position:absolute;
+    width:20px;
+    height:20px;
+    background:#0f4c81;
+    border-radius:50%;
+    top:45%;
+}
+.ticket::before { left:-10px; }
+.ticket::after { right:-10px; }
+
+/* TOP */
+.top {
+    background: #0f4c81;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+/* MIDDLE */
+.middle {
+    padding: 15px;
+    border-top: 2px dashed #ccc;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.label { font-size: 11px; color: gray; }
+.value { font-weight: bold; }
+
+/* STATUS */
+.status {
+    margin-top: 10px;
+    padding: 8px;
+    text-align: center;
+    border-radius: 20px;
+    font-weight: bold;
+}
+
+/* NAV */
+.nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.nav button {
+    width: 48%;
+}
+
+/* QR */
+.qr {
+    text-align: center;
+    padding: 15px;
+}
+
+/* ERROR */
+.error {
+    margin-top: 15px;
+    text-align: center;
+    color: red;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">✈️ PNR System</div>
+
+<div class="container">
+<div class="card">
+
+<input id="pnr" placeholder="Masukkan kode booking">
+<button onclick="cekPNR()">Cek</button>
+
+<div id="hasil"></div>
+
+</div>
+</div>
+
+<script>
+
+/* DATABASE (GABUNGAN) */
+const db = {
+"RVL789": {
+flight: "QG-812",
+dari: "UPG",
+ke: "DJJ",
+kotaDari: "Makassar",
+kotaKe: "Jayapura",
+tanggal: "10 Apr 2026",
+boarding: "08:30",
+gate: "4",
+terminal: "1",
+status: "Menunggu Pembayaran",
+
+penumpang: [
+{ nama: "Rivaldi Pratama", seat: "12A" },
+{ nama: "Andi Saputra", seat: "12B" },
+{ nama: "Budi Hartono", seat: "12C" }
+]
+}
+};
+
+let current = null;
+let index = 0;
+
+/* CEK */
+function cekPNR(){
+const input = document.getElementById("pnr").value.toUpperCase();
+
+if(!db[input]){
+document.getElementById("hasil").innerHTML = `<div class="error">PNR tidak ditemukan</div>`;
+return;
+}
+
+current = db[input];
+index = 0;
+render();
+}
+
+/* RENDER */
+function render(){
+let d = current;
+let p = d.penumpang[index];
+
+let warna = "#ff9800";
+if(d.status === "Confirmed") warna = "#00c853";
+if(d.status === "Cancelled") warna = "#f44336";
+
+document.getElementById("hasil").innerHTML = `
+<div class="ticket">
+
+<div class="top">
+${d.dari} ✈ ${d.ke}<br>
+<small>${d.kotaDari} → ${d.kotaKe}</small>
+</div>
+
+<div class="middle">
+
+<div class="grid">
+<div><div class="label">Nama</div><div class="value">${p.nama}</div></div>
+<div><div class="label">Seat</div><div class="value">${p.seat}</div></div>
+
+<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
+<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
+
+<div><div class="label">Boarding</div><div class="value">${d.boarding}</div></div>
+<div><div class="label">Gate</div><div class="value">${d.gate}</div></div>
+
+<div><div class="label">Terminal</div><div class="value">${d.terminal}</div></div>
+</div>
+
+<div class="status" style="background:${warna}">
+${d.status}
+</div>
+
+<div class="nav">
+<button onclick="prev()">⬅ Prev</button>
+<button onclick="next()">Next ➡</button>
+</div>
+
+</div>
+
+<div class="qr">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${p.nama}">
+</div>
+
+</div>
+`;
+}
+
+/* NAV */
+function next(){
+if(index < current.penumpang.length - 1){
+index++;
+render();
+}
+}
+
+function prev(){
+if(index > 0){
+index--;
+render();
+}
+}
+
+</script>
+
+</body>
+</html>
