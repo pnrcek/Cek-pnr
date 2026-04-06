@@ -3,79 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Admin Panel</title>
+<title>Admin Panel - PNR System</title>
 
 <style>
 body {
-    font-family: sans-serif;
-    background: #0d47a1;
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg,#0d47a1,#1976d2);
     color: white;
-    padding: 20px;
 }
 
-input, textarea {
+.header {
+    text-align: center;
+    padding: 20px;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+.card {
+    max-width: 420px;
+    margin: auto;
+    background: rgba(255,255,255,0.1);
+    padding: 20px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+}
+
+input, select {
     width: 100%;
-    padding: 10px;
-    margin-top: 8px;
-    border-radius: 8px;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 10px;
     border: none;
+    font-size: 14px;
 }
 
 button {
     width: 100%;
-    padding: 12px;
-    margin-top: 10px;
-    background: #00c853;
+    padding: 14px;
+    margin-top: 15px;
     border: none;
+    border-radius: 12px;
+    background: #00c853;
     color: white;
-    border-radius: 10px;
     font-weight: bold;
+    font-size: 16px;
+}
+
+.success {
+    margin-top: 10px;
+    text-align: center;
+    color: #00ffcc;
 }
 </style>
 </head>
 
 <body>
 
-<h2>✈️ Admin Input Tiket</h2>
+<div class="header">🛠️ Admin Panel (Input Tiket)</div>
 
-<input id="pnr" placeholder="Kode PNR (contoh: RVL999)">
+<div class="card">
+
+<input id="pnr" placeholder="Kode PNR (ABC123)">
+<input id="maskapai" placeholder="Maskapai">
 <input id="nama" placeholder="Nama Penumpang">
-<input id="seat" placeholder="Seat (contoh: 12A)">
-<input id="flight" placeholder="Flight">
-<input id="dari" placeholder="Dari (UPG)">
-<input id="ke" placeholder="Ke (DJJ)">
+<input id="seat" placeholder="Seat (12A)">
+<input id="flight" placeholder="Flight (GA-403)">
+<input id="dari" placeholder="Dari (CGK)">
+<input id="ke" placeholder="Ke (SUB)">
 <input id="tanggal" placeholder="Tanggal">
 <input id="boarding" placeholder="Boarding">
 <input id="gate" placeholder="Gate">
 <input id="terminal" placeholder="Terminal">
-<input id="status" placeholder="Status">
+
+<select id="status">
+<option>Confirmed</option>
+<option>Boarding</option>
+<option>Check-in Open</option>
+<option>Delayed</option>
+</select>
 
 <button onclick="simpan()">Simpan Tiket</button>
 
-<script>
-function simpan(){
-let pnr = document.getElementById("pnr").value.toUpperCase();
+<div id="msg" class="success"></div>
 
-let data = {
-flight: document.getElementById("flight").value,
-dari: document.getElementById("dari").value,
-ke: document.getElementById("ke").value,
-tanggal: document.getElementById("tanggal").value,
-boarding: document.getElementById("boarding").value,
-gate: document.getElementById("gate").value,
-terminal: document.getElementById("terminal").value,
-status: document.getElementById("status").value,
-penumpang: [
-{
-nama: document.getElementById("nama").value,
-seat: document.getElementById("seat").value
-}
-]
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+<script>
+// 🔥 GANTI CONFIG
+const firebaseConfig = {
+  apiKey: "ISI_APIKEY",
+  authDomain: "ISI_DOMAIN",
+  projectId: "ISI_PROJECT_ID",
 };
 
-localStorage.setItem(pnr, JSON.stringify(data));
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
 
-alert("Tiket berhasil disimpan!");
+async function simpan(){
+let pnr = document.getElementById("pnr").value.toUpperCase();
+
+if(!pnr) return alert("PNR wajib!");
+
+let data = {
+maskapai: v("maskapai"),
+flight: v("flight"),
+dari: v("dari"),
+ke: v("ke"),
+tanggal: v("tanggal"),
+boarding: v("boarding"),
+gate: v("gate"),
+terminal: v("terminal"),
+status: v("status"),
+penumpang: [{ nama: v("nama"), seat: v("seat") }]
+};
+
+await db.collection("tickets").doc(pnr).set(data);
+
+msg("✅ Berhasil disimpan!");
+clearForm();
+}
+
+function v(id){ return document.getElementById(id).value }
+function msg(t){ document.getElementById("msg").innerHTML = t }
+
+function clearForm(){
+document.querySelectorAll("input").forEach(i=>i.value="");
 }
 </script>
 
