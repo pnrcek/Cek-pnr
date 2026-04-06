@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Cek PNR - Lion Air</title>
+<title>Cek PNR - Flight Checker</title>
 
 <style>
 body {
@@ -10,10 +10,11 @@ body {
 
     background:
     linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url('https://images.unsplash.com/photo-1540962351504-03099e0a754b');
+    url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92');
 
     background-size: cover;
     background-position: center;
+    background-repeat: no-repeat;
 }
 
 /* CENTER */
@@ -24,19 +25,22 @@ body {
     height: 100vh;
 }
 
-/* CARD */
+/* CARD GLASS */
 .card {
-    background: white;
+    width: 360px;
     padding: 25px;
-    border-radius: 15px;
-    width: 340px;
-    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    border-radius: 20px;
+
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(12px);
+
+    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+    color: white;
 }
 
 /* TITLE */
 .title {
     text-align: center;
-    color: #cc0000;
     font-size: 22px;
     font-weight: bold;
 }
@@ -46,8 +50,8 @@ input {
     width: 100%;
     padding: 12px;
     margin-top: 15px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
+    border-radius: 10px;
+    border: none;
 }
 
 /* BUTTON */
@@ -55,27 +59,26 @@ button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
+
     background: #cc0000;
     color: white;
+
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
+
     font-weight: bold;
 }
 
-/* RESULT BOX */
+/* RESULT */
 .result {
     margin-top: 20px;
     padding: 15px;
-    background: #f5f5f5;
-    border-radius: 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.2);
 }
 
 /* STATUS */
-.status {
-    font-weight: bold;
-}
-
-.green { color: green; }
+.green { color: #00ff88; }
 .orange { color: orange; }
 .red { color: red; }
 
@@ -87,7 +90,7 @@ button {
 <div class="container">
 <div class="card">
 
-<div class="title">Cek PNR Lion Air</div>
+<div class="title">✈️ Flight PNR Checker</div>
 
 <input id="pnr" placeholder="Masukkan kode PNR">
 <button onclick="cek()">Cek Status</button>
@@ -103,6 +106,7 @@ const data = {
 
 "ABC123": {
 nama: "Budi Santoso",
+maskapai: "Lion Air",
 flight: "JT-610",
 dari: "CGK (Jakarta)",
 ke: "DPS (Bali)",
@@ -112,11 +116,22 @@ status: "Confirmed"
 
 "XYZ789": {
 nama: "Andi Saputra",
-flight: "JT-245",
+maskapai: "Garuda Indonesia",
+flight: "GA-200",
 dari: "CGK (Jakarta)",
 ke: "SUB (Surabaya)",
 jam: "13:45",
 status: "Menunggu Pembayaran"
+},
+
+"QWE456": {
+nama: "Siti Aminah",
+maskapai: "AirAsia",
+flight: "AK-101",
+dari: "KUL (Malaysia)",
+ke: "CGK (Jakarta)",
+jam: "17:20",
+status: "Confirmed"
 }
 
 };
@@ -135,10 +150,11 @@ if(d.status == "Menunggu Pembayaran") warna = "orange";
 h.innerHTML = `
 <div class="result">
 <b>Nama:</b> ${d.nama}<br>
+<b>Maskapai:</b> ${d.maskapai}<br>
 <b>Flight:</b> ${d.flight}<br>
 <b>Rute:</b> ${d.dari} → ${d.ke}<br>
 <b>Jam Berangkat:</b> ${d.jam}<br>
-<b>Status:</b> <span class="status ${warna}">${d.status}</span>
+<b>Status:</b> <span class="${warna}">${d.status}</span>
 </div>
 `;
 
