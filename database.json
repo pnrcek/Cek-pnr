@@ -1,0 +1,18 @@
+{
+  "RVL789": {
+    "flight": "QG-812",
+    "dari": "UPG",
+    "ke": "DJJ",
+    "kotaDari": "Makassar",
+    "kotaKe": "Jayapura",
+    "tanggal": "10 Apr 2026",
+    "boarding": "08:30",
+    "gate": "4",
+    "terminal": "1",
+    "status": "Menunggu Pembayaran",
+    "penumpang": [
+      { "nama": "Rivaldi Pratama", "seat": "12A" },
+      { "nama": "Andi Saputra", "seat": "12B" }
+    ]
+  }
+}
