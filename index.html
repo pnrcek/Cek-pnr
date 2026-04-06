@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Cek PNR - Flight Checker</title>
+<title>Flight PNR Checker</title>
 
 <style>
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', sans-serif;
 
     background:
     linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
@@ -17,41 +17,37 @@ body {
     background-repeat: no-repeat;
 }
 
+/* HEADER */
+.header {
+    text-align: center;
+    color: white;
+    font-size: 22px;
+    font-weight: bold;
+    padding: 20px;
+}
+
 /* CENTER */
 .container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
 }
 
-/* CARD GLASS */
+/* CARD */
 .card {
     width: 360px;
-    padding: 25px;
+    background: white;
     border-radius: 20px;
-
-    background: rgba(255,255,255,0.1);
-    backdrop-filter: blur(12px);
-
-    box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-    color: white;
-}
-
-/* TITLE */
-.title {
-    text-align: center;
-    font-size: 22px;
-    font-weight: bold;
+    padding: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 }
 
 /* INPUT */
 input {
     width: 100%;
     padding: 12px;
-    margin-top: 15px;
     border-radius: 10px;
-    border: none;
+    border: 1px solid #ccc;
 }
 
 /* BUTTON */
@@ -59,38 +55,61 @@ button {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-
     background: #cc0000;
     color: white;
-
     border: none;
     border-radius: 10px;
-
     font-weight: bold;
 }
 
-/* RESULT */
+/* RESULT CARD */
 .result {
     margin-top: 20px;
     padding: 15px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.2);
+    border-radius: 15px;
+    background: #f5f5f5;
 }
 
-/* STATUS */
-.green { color: #00ff88; }
-.orange { color: orange; }
-.red { color: red; }
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* LABEL */
+.label {
+    font-size: 12px;
+    color: gray;
+}
+
+/* VALUE */
+.value {
+    font-weight: bold;
+}
+
+/* STATUS BADGE */
+.badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.green { background: #d4ffd4; color: green; }
+.orange { background: #ffe7c2; color: orange; }
+.red { background: #ffd4d4; color: red; }
 
 </style>
 </head>
 
 <body>
 
+<div class="header">✈️ Flight PNR Checker</div>
+
 <div class="container">
 <div class="card">
-
-<div class="title">✈️ Flight PNR Checker</div>
 
 <input id="pnr" placeholder="Masukkan kode PNR">
 <button onclick="cek()">Cek Status</button>
@@ -108,8 +127,8 @@ const data = {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
 flight: "JT-610",
-dari: "CGK (Jakarta)",
-ke: "DPS (Bali)",
+dari: "CGK",
+ke: "DPS",
 jam: "08:30",
 status: "Confirmed"
 },
@@ -118,8 +137,8 @@ status: "Confirmed"
 nama: "Andi Saputra",
 maskapai: "Garuda Indonesia",
 flight: "GA-200",
-dari: "CGK (Jakarta)",
-ke: "SUB (Surabaya)",
+dari: "CGK",
+ke: "SUB",
 jam: "13:45",
 status: "Menunggu Pembayaran"
 },
@@ -128,8 +147,8 @@ status: "Menunggu Pembayaran"
 nama: "Siti Aminah",
 maskapai: "AirAsia",
 flight: "AK-101",
-dari: "KUL (Malaysia)",
-ke: "CGK (Jakarta)",
+dari: "KUL",
+ke: "CGK",
 jam: "17:20",
 status: "Confirmed"
 }
@@ -149,12 +168,46 @@ if(d.status == "Menunggu Pembayaran") warna = "orange";
 
 h.innerHTML = `
 <div class="result">
-<b>Nama:</b> ${d.nama}<br>
-<b>Maskapai:</b> ${d.maskapai}<br>
-<b>Flight:</b> ${d.flight}<br>
-<b>Rute:</b> ${d.dari} → ${d.ke}<br>
-<b>Jam Berangkat:</b> ${d.jam}<br>
-<b>Status:</b> <span class="${warna}">${d.status}</span>
+
+<div class="grid">
+<div>
+<div class="label">Nama</div>
+<div class="value">${d.nama}</div>
+</div>
+
+<div>
+<div class="label">Maskapai</div>
+<div class="value">${d.maskapai}</div>
+</div>
+
+<div>
+<div class="label">Flight</div>
+<div class="value">${d.flight}</div>
+</div>
+
+<div>
+<div class="label">Jam</div>
+<div class="value">${d.jam}</div>
+</div>
+
+<div>
+<div class="label">Dari</div>
+<div class="value">${d.dari}</div>
+</div>
+
+<div>
+<div class="label">Ke</div>
+<div class="value">${d.ke}</div>
+</div>
+</div>
+
+<br>
+
+<div>
+<div class="label">Status</div>
+<span class="badge ${warna}">${d.status}</span>
+</div>
+
 </div>
 `;
 
