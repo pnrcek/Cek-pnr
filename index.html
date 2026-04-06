@@ -5,13 +5,18 @@
 
 <style>
 body {
-    font-family: Arial;
     margin: 0;
-    background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)),
-    url('https://images.unsplash.com/photo-1504196606672-aef5c9cefc92');
+    font-family: Arial, sans-serif;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://images.unsplash.com/photo-1540962351504-03099e0a754b');
+
     background-size: cover;
+    background-position: center;
 }
 
+/* CENTER */
 .container {
     display: flex;
     justify-content: center;
@@ -19,39 +24,62 @@ body {
     height: 100vh;
 }
 
+/* CARD */
 .card {
     background: white;
     padding: 25px;
     border-radius: 15px;
-    width: 350px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+    width: 340px;
+    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
 }
 
-h2 {
+/* TITLE */
+.title {
     text-align: center;
-    color: red;
+    color: #cc0000;
+    font-size: 22px;
+    font-weight: bold;
 }
 
+/* INPUT */
 input {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
 }
 
+/* BUTTON */
 button {
     width: 100%;
-    padding: 10px;
-    background: red;
+    padding: 12px;
+    margin-top: 10px;
+    background: #cc0000;
     color: white;
     border: none;
+    border-radius: 8px;
+    font-weight: bold;
 }
 
-#hasil {
-    margin-top: 15px;
-    font-size: 14px;
+/* RESULT BOX */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f5f5f5;
+    border-radius: 10px;
 }
+
+/* STATUS */
+.status {
+    font-weight: bold;
+}
+
+.green { color: green; }
+.orange { color: orange; }
+.red { color: red; }
+
 </style>
-
 </head>
 
 <body>
@@ -59,10 +87,10 @@ button {
 <div class="container">
 <div class="card">
 
-<h2>Cek PNR</h2>
+<div class="title">Cek PNR Lion Air</div>
 
-<input id="pnr" placeholder="Masukkan PNR">
-<button onclick="cek()">Cek</button>
+<input id="pnr" placeholder="Masukkan kode PNR">
+<button onclick="cek()">Cek Status</button>
 
 <div id="hasil"></div>
 
@@ -72,22 +100,25 @@ button {
 <script>
 
 const data = {
+
 "ABC123": {
 nama: "Budi Santoso",
 flight: "JT-610",
-dari: "CGK",
-ke: "DPS",
+dari: "CGK (Jakarta)",
+ke: "DPS (Bali)",
 jam: "08:30",
 status: "Confirmed"
 },
-"RTY321": {
-nama: "Joko",
-flight: "JT-777",
-dari: "CGK",
-ke: "PLM",
-jam: "15:00",
+
+"XYZ789": {
+nama: "Andi Saputra",
+flight: "JT-245",
+dari: "CGK (Jakarta)",
+ke: "SUB (Surabaya)",
+jam: "13:45",
 status: "Menunggu Pembayaran"
 }
+
 };
 
 function cek(){
@@ -95,19 +126,32 @@ let pnr = document.getElementById("pnr").value.toUpperCase();
 let h = document.getElementById("hasil");
 
 if(data[pnr]){
+
 let d = data[pnr];
 
+let warna = "green";
+if(d.status == "Menunggu Pembayaran") warna = "orange";
+
 h.innerHTML = `
-Nama: ${d.nama}<br>
-Flight: ${d.flight}<br>
-Rute: ${d.dari} → ${d.ke}<br>
-Jam: ${d.jam}<br>
-Status: ${d.status}
+<div class="result">
+<b>Nama:</b> ${d.nama}<br>
+<b>Flight:</b> ${d.flight}<br>
+<b>Rute:</b> ${d.dari} → ${d.ke}<br>
+<b>Jam Berangkat:</b> ${d.jam}<br>
+<b>Status:</b> <span class="status ${warna}">${d.status}</span>
+</div>
 `;
 
 }else{
-h.innerHTML = "PNR tidak ditemukan";
+
+h.innerHTML = `
+<div class="result" style="color:red;">
+PNR tidak ditemukan
+</div>
+`;
+
 }
+
 }
 
 </script>
